@@ -86,6 +86,13 @@ void RailsState::tick(int fps) {
 	}
 	Root::textureManager->BindTexture("White");
 	rails->drawRails();
+	Actor cube(new string("Cube"), new string("cobble"));
+	cube.Translate(0,1.0,0);
+
+	Root::ModelviewMatrix.push(Root::ModelviewMatrix.top());
+		cube.transformToMatrix(&Root::ModelviewMatrix.top());
+		cube.drawActor("Basic");
+	Root::ModelviewMatrix.pop();
 	glslProgram->disable();
 	glutSwapBuffers();
 }

@@ -48,18 +48,9 @@ void Material::sendToShader(string shader)
 	glActiveTextureARB(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 	Root::textureManager->BindTexture(*textureName);
-	glActiveTextureARB(GL_TEXTURE1);
-	glEnable(GL_TEXTURE_2D);
-	Root::textureManager->BindTexture(*normalName);
 	glslProgram->sendUniform("tex", 0);
-	glslProgram->sendUniform("normalmap", 1);
-	glslProgram->sendUniform("material.normalenabled", normalEnabled);
 	glslProgram->sendUniform("material.color", color[0],color[1],color[2]);
-	if (shader == "GBuffer") {
-		glslProgram->sendUniform("material.emission", emission[0],emission[1],emission[2]);
-		glslProgram->sendUniform("material.specular", specular);
-		glslProgram->sendUniform("material.shininess", (float)shininess/128.0f);
-	}
+	glslProgram->sendUniform("material.emission", emission[0],emission[1],emission[2]);
 	glm::mat4 textureMatrix = glm::mat4(1.0f);
 	textureMatrix = glm::translate(textureMatrix, glm::vec3(texOffset[0],texOffset[1],0));
 	textureMatrix = glm::rotate(textureMatrix, texRotate, glm::vec3(0,0,1.0));

@@ -17,9 +17,8 @@ void Actor::drawActor(string shader)
 {
 	GLSLProgram *glslProgram = Root::shaderManager->getShader(shader);
 	glslProgram->sendUniform("modelviewMatrix", &Root::ModelviewMatrix.top()[0][0]);
-	if (shader == "Basic" || shader == "GBuffer") {
-		glslProgram->sendUniform("normalMatrix", &Root::NormalMatrix.top()[0][0],false,3);
-		Root::materialManager->getMaterial(*material)->sendToShader(shader);
-	}
+	glActiveTextureARB(GL_TEXTURE0);
+	glEnable(GL_TEXTURE_2D);
+	Root::textureManager->BindTexture(*material);
 	Root::modelManager->getModel(*model)->draw();
 }
