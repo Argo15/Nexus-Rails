@@ -360,6 +360,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RailsManager.h"
+				>
+			</File>
+			<File
 				RelativePath=".\RailsState.h"
 				>
 			</File>
