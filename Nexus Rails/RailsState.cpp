@@ -27,7 +27,7 @@ void RailsState::resize(int w, int h) {
 }
 
 void RailsState::tick(int fps) {
-	//rails->reloadRails();
+	rails->reloadRails();
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
 
@@ -53,21 +53,25 @@ void RailsState::tick(int fps) {
 	glslProgram->sendUniform("camPos",camera->geteyeX(),camera->geteyeY(),camera->geteyeZ());
 
 	glActiveTexture(GL_TEXTURE0); 
-	Root::textureManager->BindTexture("cobble");
+	Root::textureManager->BindTexture("Grass");
 	glslProgram->sendUniform("tex",0);
-	glslProgram->sendUniform("material.color", 1.0f,1.0f,1.0f);
+	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
 	glslProgram->sendUniform("material.emission", 0);
 
 	for (float i=0; i<1.0; i += 0.01) {
 		for (float j=0; j<1.0; j += 0.01) {
+			int xOff = 50*(camera->geteyeX()/50);
+			int yOff = 50*(camera->geteyeZ()/50);
 			glBegin(GL_QUADS);
-				glVertexAttrib2f(1,0.0,0.0); glVertexAttrib3f(0,-50.0+100*i,0.0,-50.0+100*j);
-				glVertexAttrib2f(1,0.0,1.0); glVertexAttrib3f(0,-50.0+100*i,0.0,-50.0+100*j+1);
-				glVertexAttrib2f(1,1.0,1.0); glVertexAttrib3f(0,-50.0+100*i+1,0.0,-50.0+100*j+1);
-				glVertexAttrib2f(1,1.0,0.0); glVertexAttrib3f(0,-50.0+100*i+1,0.0,-50.0+100*j);
+				glVertexAttrib2f(1,0.0,0.0); glVertexAttrib3f(0,-50.0+100*i+xOff,0.0,-50.0+100*j+yOff);
+				glVertexAttrib2f(1,0.0,1.0); glVertexAttrib3f(0,-50.0+100*i+xOff,0.0,-50.0+100*j+1+yOff);
+				glVertexAttrib2f(1,1.0,1.0); glVertexAttrib3f(0,-50.0+100*i+1+xOff,0.0,-50.0+100*j+1+yOff);
+				glVertexAttrib2f(1,1.0,0.0); glVertexAttrib3f(0,-50.0+100*i+1+xOff,0.0,-50.0+100*j+yOff);
 			glEnd();
 		}
 	}
+	Root::textureManager->BindTexture("White");
+	rails->drawRails();
 	glslProgram->disable();
 	glutSwapBuffers();
 }

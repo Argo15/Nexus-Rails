@@ -8,10 +8,9 @@ struct Material
 
 uniform sampler2D tex;
 uniform Material material;
-in vec2 texCoord;
-out vec4 fragColor;
+varying vec2 texCoord;
 
 void main() {
 	vec4 texcolor = texture2D(tex,texCoord);
-	fragColor = vec4(material.emission,1.0)+vec4(material.color,1.0)*texcolor;
+	gl_FragColor = vec4(material.emission,1.0)+vec4(material.color,1.0)*texcolor;
 } 

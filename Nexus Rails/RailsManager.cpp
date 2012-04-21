@@ -11,6 +11,7 @@ void RailsManager::reloadRails() {
 	ifstream myReadFile;
 	myReadFile.open("Data/Rails.txt");
 	char output[100];
+	int iOutput = 0;
 	if (myReadFile.is_open()) {
 		myReadFile >> output >> numRails;
 		if (railPositions == 0) {
@@ -20,14 +21,18 @@ void RailsManager::reloadRails() {
 		railPositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
 		for (int i=0; i<numRails; i++) {
+			myReadFile >> output >> iOutput;
 			int color[3];
+			int pos[3];
+			pos[0] = 0;
 			myReadFile >> color[0] >> color[1] >> color[2];
 			railColors[i] = new Vector3(color[0], color[1], color[2]);
-			while (strcmp(output,"END") != 0) {
-				int pos[3];
+			while (pos[0] != -10000) {
 				myReadFile >> pos[0] >> pos[1] >> pos[2];
-				Vector3 *vPos = new Vector3(pos[0], pos[1], pos[2]);
-				railPositions[i].push_back(vPos);
+				if (pos[0] != -10000) {
+					Vector3 *vPos = new Vector3(pos[0], pos[1], pos[2]);
+					railPositions[i].push_back(vPos);
+				}
 			}
 
 		}
@@ -35,5 +40,20 @@ void RailsManager::reloadRails() {
 }
 
 void RailsManager::drawRails() {
-	// lol nothing
+	int numSubDivides = 10.0;
+	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
+	glLineWidth(10.0);
+	for (int i=0; i<numRails; i++) {
+		glslProgram->sendUniform("material.color", railColors[i][0][0],railColors[i][0][1],railColors[i][0][2]);
+
+		glBegin(GL_LINE_STRIP);
+		for (int x=0; x<railPositions[i].size()-1; x++) {
+			for (float p=0.0; p<1.0; p += 1.0/numSubDivides) {
+				Vector3 point = railPositions[i][x][0]*(1-p) + railPositions[i][x+1][0]*p;
+				glVertex3f(point[0],point[1],point[2]);
+			}
+		}
+		glEnd();
+
+	}
 }

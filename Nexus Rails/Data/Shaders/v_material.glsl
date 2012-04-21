@@ -6,8 +6,8 @@ uniform mat4 projectionCameraMatrix;
 uniform vec3 camPos;
 in vec3 v_vertex;
 in vec2 v_texture;
-out vec4 worldPos;
-out vec2 texCoord;
+varying vec4 worldPos;
+varying vec2 texCoord;
 
 vec4 CurvedPosition(vec3 cameraPosition, vec4 worldPosition, float planetRadius) {
 	vec3 center = vec3(cameraPosition.x,-planetRadius,cameraPosition.z);

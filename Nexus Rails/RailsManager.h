@@ -3,6 +3,7 @@
 
 #include "Matrix.h"
 #include <vector>
+#include "Root.h"
 using namespace std;
 
 class RailsManager {
