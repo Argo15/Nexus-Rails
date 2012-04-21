@@ -12,6 +12,8 @@ RailsManager::RailsManager() {
 	currentTime = 0;
 	startTimes = 0;
 	connections = 0;
+	transitionPercent = 1.0;
+	speed = 0.008;
 }
 
 void RailsManager::reloadRails() {
@@ -22,10 +24,10 @@ void RailsManager::reloadRails() {
 	if (myReadFile.is_open()) {
 		myReadFile >> output >> numRails;
 		if (railPositions == 0) {
-			delete railPositions;
-			delete railColors;
-			delete startTimes;
-			delete connections;
+			delete[] railPositions;
+			delete[] railColors;
+			delete[] startTimes;
+			delete[] connections;
 		}
 		railPositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
@@ -58,6 +60,7 @@ void RailsManager::reloadRails() {
 				connections[conn[0]].push_back(connection);
 			}
 		}
+		myReadFile.close();
 	}
 }
 
@@ -127,15 +130,20 @@ void RailsManager::drawRails() {
 // railColors: Rail, 0, rgb
 
 void RailsManager::updateTime(Camera *camera, float dt) {
-	currentTime += dt;
+	currentTime += speed;
+	speed += dt*0.0025;
 	int currentSegment = (int)currentTime;
 	if (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d')) {
 		vector<Connection> segConnections = connections[currentSegment];
 		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
 			if (it->first == currentRail) {
+				transitionPos = camera->geteyeV();
 				currentRail = it->second;
+				transitionPercent = 0.0f;
 			} else if (it->second == currentRail) {
+				transitionPos = camera->geteyeV();
 				currentRail = it->first;
+				transitionPercent = 0.0f;
 			}
 		}
 	}
@@ -144,14 +152,19 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	if (localSegment >= railPositions[currentRail].size()-3) {	// crash into end
 		currentTime = startTimes[currentRail];
 		localSegment = 0;
+		speed = 0.008;
 	}
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
 	if (position[0] == -3000) {
 		return;
 	}
+	if (transitionPercent < 1.0) {
+		transitionPercent += dt*5.0;
+	}
 	position[1] += 1.0;
-	camera->setPosition(position[0],position[1],position[2]);
+	Vector3 finalCamPos = position*transitionPercent + transitionPos*(1.0-transitionPercent);
+	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
 	camera->recalculate();
 }
 

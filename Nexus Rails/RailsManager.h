@@ -21,6 +21,11 @@ private:
 	int *startTimes;
 	vector<Connection> *connections;
 
+	Vector3 transitionPos;
+	float transitionPercent;
+
+	float speed;
+
 	float currentTime;	// Time = num segments since start of rail 0
 	int currentRail;	// Starts on 0
 
