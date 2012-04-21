@@ -83,8 +83,6 @@ void RailsManager::reloadRails() {
 }
 
 void RailsManager::drawRails() {
-						//sound
-	Root::MIDIPLAYER->playRail(speed);
 	//int numSubDivides = 10.0;
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
 	//glLineWidth(10.0);

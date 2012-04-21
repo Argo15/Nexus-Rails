@@ -20,7 +20,7 @@ RailsState::RailsState() : GameState() {
 	rails->reloadRails();
 	clock = 0;
 	glowEnabled = false;
-	//glowBuffer = new FBO();
+	glowBuffer = new FBO();
 	Root::MIDIPLAYER->init();
 }
 
@@ -106,9 +106,6 @@ void RailsState::renderBasic() {
 	rails->drawRails();
 	rails->drawActors();
 	glslProgram->disable();
-
-	glutSwapBuffers();
-
 }
 
 void RailsState::renderGlow() {
