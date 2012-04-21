@@ -1,4 +1,4 @@
-#version 150
+#version 120
 
 uniform mat4 textureMatrix;
 uniform mat4 modelviewMatrix;
