@@ -1,0 +1,15 @@
+Numrails 2
+
+Rail 0  // ID
+0 1 0   // color
+0 5 0   // position
+10 7 0
+10 2 15
+END
+
+Rail 1
+1 0 0
+0 5 3
+7 4 6
+6 6 13
+END
