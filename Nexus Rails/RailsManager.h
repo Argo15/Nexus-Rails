@@ -24,6 +24,7 @@ public:
 	void updateTime(Camera *camera, float dt);
 	void reloadRails();
 	void drawRails();
+	Vector3 calculateSplinePoint(float,int,int); 
 };
 
 #endif
