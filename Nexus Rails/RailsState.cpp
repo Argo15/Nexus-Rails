@@ -19,7 +19,7 @@ RailsState::RailsState() : GameState() {
 	cameraMode = true;
 	rails->reloadRails();
 	clock = 0;
-	glowEnabled = true;
+	glowEnabled = false;
 	glowBuffer = new FBO();
 	Root::MIDIPLAYER->init();
 }
