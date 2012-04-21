@@ -105,7 +105,6 @@ void RailsState::renderBasic() {
 	rails->drawActors();
 	glslProgram->disable();
 
-	glutSwapBuffers();
 
 }
 
