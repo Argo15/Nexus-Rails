@@ -5,6 +5,7 @@
 #include <vector>
 #include "Root.h"
 #include "Camera.h"
+#include "Actor.h"
 using namespace std;
 
 struct Connection {
@@ -20,6 +21,7 @@ private:
 	Vector3 **railColors;
 	int *startTimes;
 	vector<Connection> *connections;
+	vector<Actor *> *actors;
 
 	Vector3 transitionPos;
 	float transitionPercent;
@@ -36,6 +38,7 @@ public:
 	void updateTime(Camera *camera, float dt);
 	void reloadRails();
 	void drawRails();
+	void drawActors();
 	Vector3 calculateSplinePoint(float,int,int); 
 };
 
