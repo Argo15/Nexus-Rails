@@ -66,7 +66,7 @@ void RailsManager::drawRails() {
 	glLineWidth(10.0);
 	for (int railID=0; railID<numRails; railID++) {
 		glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
-		int npts = railPositions[1].size()-1;
+		int npts = railPositions[railID].size()-1;
 		int nsegment = 32;
 		Vector3 pts[33];
 		glBegin(GL_LINE_STRIP);
@@ -74,14 +74,14 @@ void RailsManager::drawRails() {
 		{
 			for(int i =0; i<=nsegment; i++)
 			{
-				if(startingPoint >= npts-3)
+				if(startingPoint >= npts)
 				{
 					break;
 				}
 				float t = (float)i/nsegment;
 				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
-				if(pts[1][0]!=-3000)
+				if(pts[i][0]!=-3000)
 				{
 					glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
 				}
@@ -113,10 +113,13 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	if (currentTime >= railPositions[currentRail].size()-1) {
 		currentTime=0;
 	}
-	int segment = (int)currentTime;
-	if (segment < 0 || segment >= railPositions[currentRail].size()-4) return;
+	int segment = (int)currentTime - startTimes[currentRail];
+	if (segment < 0 || segment >= railPositions[currentRail].size()-3) return;
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, segment);
+	if (position[0] == -3000) {
+		return;
+	}
 	position[1] += 1.0;
 	camera->setPosition(position[0],position[1],position[2]);
 	camera->recalculate();
