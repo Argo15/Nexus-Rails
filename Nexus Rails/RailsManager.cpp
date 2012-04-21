@@ -99,6 +99,7 @@ void RailsManager::drawRails() {
 	glLineWidth(10.0);
 	for (int railID=0; railID<numRails; railID++) {
 		glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
+		glslProgram->sendUniform("material.emission", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
 		int npts = railPositions[railID].size()-1;
 		int nsegment = 32;
 		Vector3 pts[33];
@@ -134,6 +135,7 @@ void RailsManager::drawRails() {
 		int npts = railPositions[railID].size()-1;
 		for(int startingPoint = 0 ; startingPoint < npts;startingPoint++) {
 			glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+			glslProgram->sendUniform("material.emission", 1.0f, 1.0f, 1.0f);
 			glPointSize(25);
 			glBegin(GL_POINTS);
 				Vector3 pnt = calculateSplinePoint(0,railID,startingPoint);
