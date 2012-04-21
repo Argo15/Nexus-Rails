@@ -14,12 +14,14 @@ RailsManager::RailsManager() {
 	connections = 0;
 	transitionPercent = 1.0;
 	speed = 0.008;
+	actors = 0;
 }
 
 void RailsManager::reloadRails() {
 	ifstream myReadFile;
 	myReadFile.open("Data/Rails.txt");
 	char output[100];
+	char output2[100];
 	int iOutput = 0;
 	if (myReadFile.is_open()) {
 		myReadFile >> output >> numRails;
@@ -28,11 +30,13 @@ void RailsManager::reloadRails() {
 			delete[] railColors;
 			delete[] startTimes;
 			delete[] connections;
+			delete actors;
 		}
 		railPositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
 		startTimes = new int[numRails];
 		connections = new vector<Connection>[10000];
+		actors = new vector<Actor *>();
 		for (int i=0; i<numRails; i++) {
 			myReadFile >> output >> iOutput;
 			myReadFile >> output >> startTimes[i];
@@ -60,6 +64,19 @@ void RailsManager::reloadRails() {
 				connections[conn[0]].push_back(connection);
 			}
 		}
+
+		while (output[0] != 'x' || output2[0] != 'x') {
+			int pos[3];
+			int scale[3];
+			myReadFile >> output >> output2 >> pos[0] >> pos[1] >> pos[2] >> scale[0] >> scale[1] >> scale[2];
+			if (output[0] != 'x' || output2[0] != 'x') {
+				Actor *newActor = new Actor(new string(output), new string(output2));
+				newActor->setTranslate(pos[0],pos[1],pos[2]);
+				newActor->setScale(scale[0],scale[1],scale[2]);
+				actors->push_back(newActor);
+			}
+		}
+		
 		myReadFile.close();
 	}
 }
@@ -126,6 +143,16 @@ void RailsManager::drawRails() {
 	}
 }
 
+void RailsManager::drawActors() {
+	for (vector<Actor *>::iterator it = actors->begin(); it != actors->end(); it++) {
+		Actor *actor = (*it);
+		Root::ModelviewMatrix.push(Root::ModelviewMatrix.top());
+			actor->transformToMatrix(&Root::ModelviewMatrix.top());
+			actor->drawActor("Basic");
+		Root::ModelviewMatrix.pop();
+	}
+}
+
 // railPositions: Rail, Segment, 0, xyz
 // railColors: Rail, 0, rgb
 
@@ -133,7 +160,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	currentTime += speed;
 	speed += dt*0.0025;
 	int currentSegment = (int)currentTime;
-	if (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d')) {
+	if (transitionPercent > 0.99 && (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d'))) {
 		vector<Connection> segConnections = connections[currentSegment];
 		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
 			if (it->first == currentRail) {

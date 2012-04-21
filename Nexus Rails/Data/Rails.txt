@@ -45,3 +45,5 @@ Start 5
 -10000 -10000 -10000
 
 Cube cobble   0 1 0   1 5 1
+Cube Grass  0 8 0   2 2 2
+x x 0 0 0 0 0 0
