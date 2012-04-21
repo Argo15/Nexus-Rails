@@ -81,7 +81,7 @@ void RailsManager::drawRails() {
 				float t = (float)i/nsegment;
 				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
-				if(pts[1][0]!=-3000)
+				if(pts[i][0]!=-3000)
 				{
 					glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
 				}
