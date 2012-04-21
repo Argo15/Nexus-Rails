@@ -226,6 +226,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Midi.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ModelManager.cpp"
 				>
 			</File>

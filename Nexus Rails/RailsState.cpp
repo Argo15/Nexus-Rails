@@ -66,7 +66,7 @@ void RailsState::tick(int fps) {
 
 	glslProgram->sendUniform("camPos",camera->geteyeX(),camera->geteyeY(),camera->geteyeZ());
 
-	glActiveTexture(GL_TEXTURE0); 
+	glActiveTexture(GL_TEXTURE0);
 	Root::textureManager->BindTexture("Grass");
 	glslProgram->sendUniform("tex",0);
 	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
