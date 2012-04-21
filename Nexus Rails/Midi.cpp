@@ -17,6 +17,17 @@ using namespace std;
 	DWORD NoteC = 0x00403c90;
 	DWORD NoteE = 0x00404090;
 	DWORD NoteG = 0x00404390;
+/*
+	DWORD NoteA0 = ;
+	DWORD NoteA0sharp = ;
+	DWORD NoteB0 = ;
+	DWORD NoteC = 0x00403c90;
+	DWORD NoteD = ;
+	DWORD NoteE = 0x00404090;
+	DWORD NoteF = ;
+	DWORD NoteG = 0x00404390;
+*/
+
 	HMIDIOUT handle;
 	unsigned int DEFAULT_DEVICE = 0; 
 
@@ -43,7 +54,15 @@ int Midi::init()
 return 0;
 }
 
-void Midi::playRail(int)
+float countdown = 0;
+
+void Midi::playRail(float wait)
 {
-	midiOutShortMsg(handle, NoteG);
+	//cout<<wait<<endl;
+	if(countdown <= 0)
+	{
+		midiOutShortMsg(handle, NoteG);
+		countdown = 100;
+	}
+	countdown-=wait*100;
 }

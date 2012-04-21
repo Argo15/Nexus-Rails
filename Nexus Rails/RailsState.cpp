@@ -106,6 +106,9 @@ void RailsState::renderBasic() {
 	rails->drawRails();
 	rails->drawActors();
 	glslProgram->disable();
+
+	glutSwapBuffers();
+
 }
 
 void RailsState::renderGlow() {
@@ -173,5 +176,5 @@ void RailsState::renderGlow() {
 		glTexCoord2f(1.0,1.0); glVertex3f(1.0,1.0,-1.0);
 		glTexCoord2f(1.0,0); glVertex3f(1.0,0,-1.0);
 	glEnd();
-	
+
 }

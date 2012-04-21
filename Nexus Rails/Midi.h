@@ -5,7 +5,7 @@ class Midi
 {
 public:
 	int init();
-	void playRail(int);
+	void playRail(float);
 private:
 };
 
