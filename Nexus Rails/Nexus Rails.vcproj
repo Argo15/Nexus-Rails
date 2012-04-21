@@ -234,6 +234,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\RailsState.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Root.cpp"
 				>
 			</File>
@@ -353,6 +357,10 @@
 			</File>
 			<File
 				RelativePath=".\ModelManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RailsState.h"
 				>
 			</File>
 			<File

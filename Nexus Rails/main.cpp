@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <GL/freeglut.h>
 #include "Root.h"
+#include "RailsState.h"
 
 int currentTime = 0;
 int vsync = 0;
@@ -25,7 +26,7 @@ void init() {
 
 	Root::inputManager = new InputManager();
 
-	//Root::GAMESTATE = new WorldState();
+	Root::GAMESTATE = new RailsState();
 }
 
 void resize(int w, int h) {
