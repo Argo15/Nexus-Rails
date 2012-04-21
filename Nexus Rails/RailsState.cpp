@@ -14,6 +14,7 @@ RailsState::RailsState() : GameState() {
 	view = new View();
 	camera = new Camera();
 	frustum = new Frustum();
+	rails = new RailsManager();
 }
 
 void RailsState::resize(int w, int h) {
@@ -26,6 +27,7 @@ void RailsState::resize(int w, int h) {
 }
 
 void RailsState::tick(int fps) {
+	rails->reloadRails();
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
 
