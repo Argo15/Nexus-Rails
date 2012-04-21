@@ -49,7 +49,7 @@ void render(void) {
 
 		char buffer[5];
 		_itoa((int)fps, buffer, 10);
-		string title = string("Living Nexus - FPS: ") + string(buffer);
+		string title = string("Nexus Rails - FPS: ") + string(buffer);
 		glutSetWindowTitle(title.c_str());
 		
 		Root::GAMESTATE->tick((int)fps);

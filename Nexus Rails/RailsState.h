@@ -7,6 +7,8 @@
 #include "Frustum.h"
 #include <GL/freeglut.h>
 #include "RailsManager.h"
+#include "Transformable.h"
+#include "Actor.h"
 
 class RailsState : public GameState {
 private: 
@@ -14,6 +16,8 @@ private:
 	View *view;
 	Camera *camera;
 	RailsManager *rails;
+
+	float clock;
 
 	bool cameraMode;
 
