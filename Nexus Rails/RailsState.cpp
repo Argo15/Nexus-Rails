@@ -19,8 +19,8 @@ RailsState::RailsState() : GameState() {
 	cameraMode = true;
 	rails->reloadRails();
 	clock = 0;
-	glowEnabled = true;
-	glowBuffer = new FBO();
+	glowEnabled = false;
+	//glowBuffer = new FBO();
 	Root::MIDIPLAYER->init();
 }
 
@@ -71,6 +71,7 @@ void RailsState::renderBasic() {
 
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
 	glslProgram->use();
+
 	glBindFragDataLocation(glslProgram->getHandle(), 0, "fragColor");
 	glBindAttribLocation(glslProgram->getHandle(), 0, "v_vertex");
 	glBindAttribLocation(glslProgram->getHandle(), 1, "v_texture");
@@ -78,16 +79,17 @@ void RailsState::renderBasic() {
 	camera->transformToMatrix(&Root::ProjectionMatrix.top());
 	glslProgram->sendUniform("projectionCameraMatrix", &Root::ProjectionMatrix.top()[0][0]);
 	glslProgram->sendUniform("modelviewMatrix", &Root::ModelviewMatrix.top()[0][0]);
-
 	glm::mat4 texMat = glm::mat4(1.0f);
 	glslProgram->sendUniform("textureMatrix", &texMat[0][0]);
+
 	glslProgram->sendUniform("camPos",camera->geteyeX(),camera->geteyeY(),camera->geteyeZ());
 
 	glActiveTexture(GL_TEXTURE0);
 	Root::textureManager->BindTexture("Grass");
 	glslProgram->sendUniform("tex",0);
 	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
-		glslProgram->sendUniform("material.emission", 0.0f, 0.0f, 0.0f);
+	glslProgram->sendUniform("material.emission", 0.0f, 0.0f, 0.0f);
+
 	for (float i=0; i<1.0; i += 0.01) {
 		for (float j=0; j<1.0; j += 0.01) {
 			int xOff = 50*(camera->geteyeX()/50);
