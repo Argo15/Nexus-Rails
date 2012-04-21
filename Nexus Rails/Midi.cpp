@@ -1,3 +1,6 @@
+
+
+
 // MIDI DEMO / EXPERIMENTAL PROGRAM
 // OS - Windows 98
 // Compiler - Microsoft Visual C++
@@ -8,15 +11,19 @@
 
 #include <iostream>
 #include <windows.h>
+#include "Midi.h"
 using namespace std;
 
-int init()
-{
-	HMIDIOUT handle;
-	unsigned int DEFAULT_DEVICE = 0;         // Default MIDI Device
 	DWORD NoteC = 0x00403c90;
 	DWORD NoteE = 0x00404090;
 	DWORD NoteG = 0x00404390;
+	HMIDIOUT handle;
+	unsigned int DEFAULT_DEVICE = 0; 
+
+int Midi::init()
+{
+        // Default MIDI Device
+
 
 	if(!midiOutOpen(&handle, DEFAULT_DEVICE, 0,0, CALLBACK_NULL))
 	{
@@ -34,4 +41,9 @@ int init()
 	cout << "Error Opening Default MIDI Device" << endl;
 
 return 0;
+}
+
+void Midi::playRail(int)
+{
+	midiOutShortMsg(handle, NoteG);
 }
