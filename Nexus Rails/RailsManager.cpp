@@ -5,6 +5,9 @@
 RailsManager::RailsManager() {
 	railPositions = 0;
 	railColors = 0;
+	currentRail = 1;
+	currentTime = 0;
+	startTimes = 0;
 }
 
 void RailsManager::reloadRails() {
@@ -17,11 +20,14 @@ void RailsManager::reloadRails() {
 		if (railPositions == 0) {
 			delete railPositions;
 			delete railColors;
+			delete startTimes;
 		}
 		railPositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
+		startTimes = new int[numRails];
 		for (int i=0; i<numRails; i++) {
 			myReadFile >> output >> iOutput;
+			myReadFile >> output >> startTimes[i];
 			int color[3];
 			int pos[3];
 			pos[0] = 0;
@@ -56,4 +62,29 @@ void RailsManager::drawRails() {
 		glEnd();
 
 	}
+}
+
+// railPositions: Rail, Segment, 0, xyz
+// railColors: Rail, 0, rgb
+
+void RailsManager::updateTime(Camera *camera, float dt) {
+	if (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d')) {
+		currentRail -= 1;
+		if (currentRail < 0) {
+			currentRail = 1;
+		}
+	}
+	currentTime += dt;
+	if (currentTime >= railPositions[currentRail].size()-1) {
+		currentTime=0;
+	}
+	int segment = (int)currentTime+startTimes[currentRail];
+	if (segment >= railPositions[currentRail].size()-1 ) return;
+	Vector3 segStart = railPositions[currentRail][segment][0];
+	Vector3 segEnd = railPositions[currentRail][segment+1][0];
+	float p = currentTime - (int)currentTime;
+	Vector3 position = railPositions[currentRail][segment][0]*(1-p) + railPositions[currentRail][segment+1][0]*p;
+	position[1] += 1.0;
+	camera->setPosition(position[0],position[1],position[2]);
+	camera->recalculate();
 }

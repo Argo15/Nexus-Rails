@@ -15,6 +15,7 @@ RailsState::RailsState() : GameState() {
 	camera = new Camera();
 	frustum = new Frustum();
 	rails = new RailsManager();
+	cameraMode = true;
 }
 
 void RailsState::resize(int w, int h) {
@@ -32,7 +33,14 @@ void RailsState::tick(int fps) {
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
 
 	camera->mouseRotate();
-	camera->move(fps/20);
+	if (cameraMode) {
+		camera->move(fps/20);
+	} else {
+		rails->updateTime(camera,fps/6000.0);
+	}
+	if (Root::inputManager->isKeyDownOnce('c')) {
+		cameraMode = !cameraMode;
+	}
 	view->use3D(true);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

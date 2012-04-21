@@ -15,6 +15,8 @@ private:
 	Camera *camera;
 	RailsManager *rails;
 
+	bool cameraMode;
+
 
 public:
 	RailsState();
