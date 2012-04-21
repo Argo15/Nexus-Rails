@@ -142,7 +142,7 @@ void RailsManager::drawRails() {
 			glEnd();
 		}
 	}
-	Root::MIDIPLAYER->playRail(0);
+
 }
 
 void RailsManager::drawActors() {
@@ -195,6 +195,8 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	Vector3 finalCamPos = position*transitionPercent + transitionPos*(1.0-transitionPercent);
 	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
 	camera->recalculate();
+					//sound
+	Root::MIDIPLAYER->playRail(speed);
 }
 
 

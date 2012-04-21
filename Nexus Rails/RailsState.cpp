@@ -91,4 +91,5 @@ void RailsState::tick(int fps) {
 	rails->drawActors();
 	glslProgram->disable();
 	glutSwapBuffers();
+
 }
