@@ -97,6 +97,17 @@ void RailsManager::drawRails() {
 		//}
 		glEnd();
 	}
+	for (int railID=0; railID<numRails; railID++) {
+		int npts = railPositions[railID].size()-1;
+		for(int startingPoint = 0 ; startingPoint < npts;startingPoint++) {
+			glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+			glPointSize(25);
+			glBegin(GL_POINTS);
+				Vector3 pnt = calculateSplinePoint(0,railID,startingPoint);
+				glVertex3f(pnt[0],pnt[1],pnt[2]);
+			glEnd();
+		}
+	}
 }
 
 // railPositions: Rail, Segment, 0, xyz
