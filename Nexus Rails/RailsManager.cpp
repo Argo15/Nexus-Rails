@@ -11,6 +11,7 @@ RailsManager::RailsManager() {
 	currentRail = 1;
 	currentTime = 0;
 	startTimes = 0;
+	connections = 0;
 }
 
 void RailsManager::reloadRails() {
@@ -24,10 +25,12 @@ void RailsManager::reloadRails() {
 			delete railPositions;
 			delete railColors;
 			delete startTimes;
+			delete connections;
 		}
 		railPositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
 		startTimes = new int[numRails];
+		connections = new vector<Connection>[10000];
 		for (int i=0; i<numRails; i++) {
 			myReadFile >> output >> iOutput;
 			myReadFile >> output >> startTimes[i];
@@ -43,7 +46,17 @@ void RailsManager::reloadRails() {
 					railPositions[i].push_back(vPos);
 				}
 			}
-
+		}
+		int conn[3];
+		conn[0] = 0;
+		while (conn[0] != -10000) {
+			myReadFile >> conn[0] >> conn[1] >> conn[2];
+			if (conn[0] >= 0) {
+				Connection connection;
+				connection.first = conn[1];
+				connection.second = conn[2];
+				connections[conn[0]].push_back(connection);
+			}
 		}
 	}
 }
@@ -97,26 +110,43 @@ void RailsManager::drawRails() {
 		//}
 		glEnd();
 	}
+	for (int railID=0; railID<numRails; railID++) {
+		int npts = railPositions[railID].size()-1;
+		for(int startingPoint = 0 ; startingPoint < npts;startingPoint++) {
+			glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+			glPointSize(25);
+			glBegin(GL_POINTS);
+				Vector3 pnt = calculateSplinePoint(0,railID,startingPoint);
+				glVertex3f(pnt[0],pnt[1],pnt[2]);
+			glEnd();
+		}
+	}
 }
 
 // railPositions: Rail, Segment, 0, xyz
 // railColors: Rail, 0, rgb
 
 void RailsManager::updateTime(Camera *camera, float dt) {
+	currentTime += dt;
+	int currentSegment = (int)currentTime;
 	if (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d')) {
-		currentRail -= 1;
-		if (currentRail < 0) {
-			currentRail = 1;
+		vector<Connection> segConnections = connections[currentSegment];
+		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
+			if (it->first == currentRail) {
+				currentRail = it->second;
+			} else if (it->second == currentRail) {
+				currentRail = it->first;
+			}
 		}
 	}
-	currentTime += dt;
-	if (currentTime >= railPositions[currentRail].size()-1) {
-		currentTime=0;
+	int localSegment = (int)currentTime - startTimes[currentRail];
+	if (localSegment < 0) return;	
+	if (localSegment >= railPositions[currentRail].size()-3) {	// crash into end
+		currentTime = startTimes[currentRail];
+		localSegment = 0;
 	}
-	int segment = (int)currentTime - startTimes[currentRail];
-	if (segment < 0 || segment >= railPositions[currentRail].size()-3) return;
 	float p = currentTime - (int)currentTime;
-	Vector3 position = calculateSplinePoint(p, currentRail, segment);
+	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
 	if (position[0] == -3000) {
 		return;
 	}
