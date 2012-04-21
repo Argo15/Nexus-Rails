@@ -1,4 +1,5 @@
 #include "Root.h"
+#include "Midi.h"
 
 GameState *Root::GAMESTATE = 0;
 RenderState Root::RENDERSTATE = FINAL;
@@ -10,3 +11,4 @@ ShaderManager *Root::shaderManager = 0;
 stack<glm::mat4> Root::ModelviewMatrix = stack<glm::mat4>();
 stack<glm::mat4> Root::ProjectionMatrix = stack<glm::mat4>();
 stack<glm::mat3> Root::NormalMatrix = stack<glm::mat3>();
+Midi *Root::MIDIPLAYER = new Midi();

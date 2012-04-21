@@ -1,4 +1,5 @@
 #include "RailsState.h"
+#include "Root.h"
 
 RailsState::RailsState() : GameState() {
 	glShadeModel(GL_SMOOTH);
@@ -20,6 +21,7 @@ RailsState::RailsState() : GameState() {
 	clock = 0;
 	glowEnabled = true;
 	glowBuffer = new FBO();
+	Root::MIDIPLAYER->init();
 }
 
 void RailsState::resize(int w, int h) {

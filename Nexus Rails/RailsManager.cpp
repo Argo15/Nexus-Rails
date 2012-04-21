@@ -1,5 +1,6 @@
 #include "RailsManager.h"
 #include "Matrix.h"
+#include "Root.h"
 #include<iostream>
 #include<fstream>
 #include<math.h>
@@ -143,6 +144,7 @@ void RailsManager::drawRails() {
 			glEnd();
 		}
 	}
+	Root::MIDIPLAYER->playRail(0);
 }
 
 void RailsManager::drawActors() {

@@ -368,6 +368,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Midi.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Model.h"
 				>
 			</File>

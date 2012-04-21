@@ -6,6 +6,7 @@
 #include "MaterialManager.h"
 #include "InputManager.h"
 #include "ShaderManager.h"
+#include "Midi.h"
 
 enum RenderState {FORWARD, FINAL, POSITION, NORMAL, COLOR, LIGHTING, SSAO, SPECULAR, MOTION};
 
@@ -21,6 +22,7 @@ public:
 	static stack<glm::mat4> ModelviewMatrix;
 	static stack<glm::mat4> ProjectionMatrix;
 	static stack<glm::mat3> NormalMatrix;
+	static Midi *MIDIPLAYER;
 };
 
 #endif
