@@ -110,12 +110,10 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	if (currentTime >= railPositions[currentRail].size()-1) {
 		currentTime=0;
 	}
-	int segment = (int)currentTime+startTimes[currentRail];
-	if (segment >= railPositions[currentRail].size()-1 ) return;
-	Vector3 segStart = railPositions[currentRail][segment][0];
-	Vector3 segEnd = railPositions[currentRail][segment+1][0];
+	int segment = (int)currentTime;
+	if (segment < 0 || segment >= railPositions[currentRail].size()-4) return;
 	float p = currentTime - (int)currentTime;
-	Vector3 position = railPositions[currentRail][segment][0]*(1-p) + railPositions[currentRail][segment+1][0]*p;
+	Vector3 position = calculateSplinePoint(p, currentRail, segment);
 	position[1] += 1.0;
 	camera->setPosition(position[0],position[1],position[2]);
 	camera->recalculate();
@@ -133,19 +131,19 @@ Vector3 RailsManager::calculateSplinePoint(float t, int railID, int startingPoin
 	Vector3 point2;
 	Vector3 point3;
 
-	if(startingPoint < npts)
+	if(startingPoint <= npts)
 	{
 		point0 = Vector3(railPositions[railID][startingPoint][0][0],railPositions[railID][startingPoint][0][1],railPositions[railID][startingPoint][0][2]);
 	}
-	if(startingPoint+1 < npts)
+	if(startingPoint+1 <= npts)
 	{
 		point1 = Vector3(railPositions[railID][startingPoint+1][0][0],railPositions[railID][startingPoint+1][0][1],railPositions[railID][startingPoint+1][0][2]);
 	}
-	if(startingPoint+2 < npts)
+	if(startingPoint+2 <= npts)
 	{
 		point2 = Vector3(railPositions[railID][startingPoint+2][0][0],railPositions[railID][startingPoint+2][0][1],railPositions[railID][startingPoint+2][0][2]);
 	}
-	if(startingPoint+3 < npts)
+	if(startingPoint+3 <= npts)
 	{
 		point3 = Vector3(railPositions[railID][startingPoint+3][0][0],railPositions[railID][startingPoint+3][0][1],railPositions[railID][startingPoint+3][0][2]);
 	}
