@@ -9,6 +9,7 @@
 #include "RailsManager.h"
 #include "Transformable.h"
 #include "Actor.h"
+#include "FBO.h"
 
 class RailsState : public GameState {
 private: 
@@ -20,7 +21,11 @@ private:
 	float clock;
 
 	bool cameraMode;
+	bool glowEnabled;
+	FBO *glowBuffer;
 
+	void renderBasic();
+	void renderGlow();
 
 public:
 	RailsState();
