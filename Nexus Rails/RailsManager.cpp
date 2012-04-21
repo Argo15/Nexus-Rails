@@ -1,6 +1,9 @@
 #include "RailsManager.h"
+#include "Matrix.h"
 #include<iostream>
 #include<fstream>
+#include<math.h>
+using namespace std;
 
 RailsManager::RailsManager() {
 	railPositions = 0;
@@ -40,20 +43,92 @@ void RailsManager::reloadRails() {
 }
 
 void RailsManager::drawRails() {
-	int numSubDivides = 10.0;
+	//int numSubDivides = 10.0;
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
-	glLineWidth(10.0);
-	for (int i=0; i<numRails; i++) {
-		glslProgram->sendUniform("material.color", railColors[i][0][0],railColors[i][0][1],railColors[i][0][2]);
+	//glLineWidth(10.0);
+	//for (int i=0; i<numRails; i++) {
+		//glslProgram->sendUniform("material.color", railColors[i][0][0],railColors[i][0][1],railColors[i][0][2]);
 
-		glBegin(GL_LINE_STRIP);
-		for (int x=0; x<railPositions[i].size()-1; x++) {
-			for (float p=0.0; p<1.0; p += 1.0/numSubDivides) {
-				Vector3 point = railPositions[i][x][0]*(1-p) + railPositions[i][x+1][0]*p;
-				glVertex3f(point[0],point[1],point[2]);
-			}
+		//glBegin(GL_LINE_STRIP);
+		//for (int x=0; x<railPositions[i].size()-1; x++) {
+			//for (float p=0.0; p<1.0; p += 1.0/numSubDivides) {
+				//Vector3 point = railPositions[i][x][0]*(1-p) + railPositions[i][x+1][0]*p;
+				//glVertex3f(point[0],point[1],point[2]);
+			//}
+		//}
+		//glEnd();
+		glLineWidth(10.0);
+		for (int railID=0; railID<numRails; railID++) {
+			glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
+			int npts = railPositions[1].size()-1;
+			int nsegment = 32;
+			Vector3 pts[33];
+			glBegin(GL_LINE_STRIP);
+			for(int startingPoint =0 ; startingPoint < npts;startingPoint++)
+				{
+					for(int i =0; i<=nsegment; i++)
+					{
+						if(startingPoint >= npts-3)
+						{
+							break;
+						}
+						float t = (float)i/nsegment;
+						//System.out.println("t "+t);
+						pts[i] = calculateSplinePoint(t,railID,startingPoint);
+						glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
+						//cout<<pts[i][0]<<" "<<pts[i][1]<<" "<<pts[i][2]<<endl;
+					}
+				}
+			
+
+			//glBegin(GL_LINE_STRIP);
+			//for(int r =5;r<30;r++)
+			//{
+			//	glVertex3f(pts[r][0],pts[r][1],pts[r][2]);
+			//}
+			glEnd();
 		}
-		glEnd();
 
-	}
+	
+}
+
+
+
+
+Vector3 RailsManager::calculateSplinePoint(float t, int railID, int startingPoint)
+{
+	int npts = railPositions[railID].size()-1;
+
+	Vector3 point0;
+	Vector3 point1;
+	Vector3 point2;
+	Vector3 point3;
+
+		if(startingPoint < npts)
+		{
+			point0 = Vector3(railPositions[railID][startingPoint][0][0],railPositions[railID][startingPoint][0][1],railPositions[railID][startingPoint][0][2]);
+		}
+		if(startingPoint+1 < npts)
+		{
+			point1 = Vector3(railPositions[railID][startingPoint+1][0][0],railPositions[railID][startingPoint+1][0][1],railPositions[railID][startingPoint+1][0][2]);
+		}
+		if(startingPoint+2 < npts)
+		{
+			point2 = Vector3(railPositions[railID][startingPoint+2][0][0],railPositions[railID][startingPoint+2][0][1],railPositions[railID][startingPoint+2][0][2]);
+		}
+		if(startingPoint+3 < npts)
+		{
+			point3 = Vector3(railPositions[railID][startingPoint+3][0][0],railPositions[railID][startingPoint+3][0][1],railPositions[railID][startingPoint+3][0][2]);
+		}
+			point0*=((float)(((float)1/6)*(pow(-t,3)+(3*pow(t,2))-(3*t)+1)));
+            point1*=((float)(((float)1/6)*((3*pow(t,3))-(6*pow(t,2))+4)));
+            point2*=((float)(((float)1/6)*((-3*pow(t,3))+(3*pow(t,2))+(3*t +1))));
+            point3*=((float)(((float)1/6)*(pow(t,3))));
+
+		Vector3 total = Vector3(0,0,0);
+		total+=point0;
+		total+=point1;
+		total+=point2;
+		total+=point3;
+	return total;
 }

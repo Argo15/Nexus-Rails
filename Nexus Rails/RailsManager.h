@@ -18,6 +18,7 @@ public:
 
 	void reloadRails();
 	void drawRails();
+	Vector3 calculateSplinePoint(float,int,int); 
 };
 
 #endif
