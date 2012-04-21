@@ -81,7 +81,10 @@ void RailsManager::drawRails() {
 				float t = (float)i/nsegment;
 				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
-				glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
+				if(pts[1][0]!=-3000)
+				{
+					glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
+				}
 				//cout<<pts[i][0]<<" "<<pts[i][1]<<" "<<pts[i][2]<<endl;
 			}
 		}
@@ -135,17 +138,33 @@ Vector3 RailsManager::calculateSplinePoint(float t, int railID, int startingPoin
 	{
 		point0 = Vector3(railPositions[railID][startingPoint][0][0],railPositions[railID][startingPoint][0][1],railPositions[railID][startingPoint][0][2]);
 	}
+	else
+	{
+		return Vector3(-3000,0,0);
+	}
 	if(startingPoint+1 <= npts)
 	{
 		point1 = Vector3(railPositions[railID][startingPoint+1][0][0],railPositions[railID][startingPoint+1][0][1],railPositions[railID][startingPoint+1][0][2]);
+	}
+	else
+	{
+		return Vector3(-3000,0,0);
 	}
 	if(startingPoint+2 <= npts)
 	{
 		point2 = Vector3(railPositions[railID][startingPoint+2][0][0],railPositions[railID][startingPoint+2][0][1],railPositions[railID][startingPoint+2][0][2]);
 	}
+	else
+	{
+		return Vector3(-3000,0,0);
+	}
 	if(startingPoint+3 <= npts)
 	{
 		point3 = Vector3(railPositions[railID][startingPoint+3][0][0],railPositions[railID][startingPoint+3][0][1],railPositions[railID][startingPoint+3][0][2]);
+	}
+	else
+	{
+		return Vector3(-3000,0,0);
 	}
 	point0*=((float)(((float)1/6)*(pow(-t,3)+(3*pow(t,2))-(3*t)+1)));
 	point1*=((float)(((float)1/6)*((3*pow(t,3))-(6*pow(t,2))+4)));
