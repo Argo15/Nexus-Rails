@@ -18,6 +18,10 @@ Camera::Camera()
 
 void Camera::mouseRotate()
 {
+	if (!Root::inputManager->isMouseButtonDown(2)) {
+		lastMouseX = -1;
+		return;
+	}
 	int mouseX=Root::inputManager->getMouseX();
 	int mouseY=Root::inputManager->getMouseY();
 

@@ -5,12 +5,13 @@
 #include "WorldCamera.h"
 #include "View.h"
 #include "Frustum.h"
+#include <GL/freeglut.h>
 
 class RailsState : public GameState {
 private: 
 	Frustum *frustum;
 	View *view;
-	WorldCamera *camera;
+	Camera *camera;
 
 public:
 	RailsState();
