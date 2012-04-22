@@ -137,7 +137,7 @@ void Midi::playRail(float speed,int currentRail)
 	if(countdown <= 0)
 	{
 		playNextNote(speed);
-		countdown = 50;
+		countdown = 25;
 	}
 	countdown-=speed*100;
 }
@@ -373,7 +373,7 @@ void Midi::playNextNote(float speed)
 void Midi::loadSongs()
 {
 	ifstream song0;
-	song0.open("Data/Rail0Song2.txt");
+	song0.open("Data/Rail0Song.txt");
 	int count = 0;
 	while(song0.eof()==false)
 	{
@@ -384,4 +384,9 @@ void Midi::loadSongs()
 	}
 	song0.close();
 
+}
+
+void Midi::die()
+{
+	songIndex[currentSong] = 0;
 }
