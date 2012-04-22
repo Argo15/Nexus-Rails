@@ -61,9 +61,9 @@ void RailsState::tick(int fps) {
 	}
 
 	if (glowEnabled) {
-		renderGlow();
+		renderGlow(fps);
 	} else {
-		renderBasic();
+		renderBasic(fps);
 	}
 
 	glutSwapBuffers();
@@ -81,32 +81,36 @@ void RailsState::generateSky() {
 	}
 }
 
-void RailsState::drawSky(GLSLProgram *glslProgram) {
+void RailsState::drawSky(GLSLProgram *glslProgram, int fps) {
 	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
 	glslProgram->sendUniform("material.emission", 1.0f, 1.0f, 1.0f);
 	Vector3 camPos = camera->geteyeV();
 	int xPos = (camPos[0]+100)-((int)camPos[0]+100)%200;
 	int zPos = (camPos[2]+100)-((int)camPos[2]+100)%200;
-	for (int i=0; i<numStars; i++) {
+	int count = numStars;
+	if (fps < 58) {
+		count /= 2;
+	}
+	for (int i=0; i<count; i++) {
 		Vector3 currentStar = stars[i]+Vector3(xPos,0,zPos);
 		glPointSize(2);
 		Vector3 diff = Vector3(camPos-currentStar);
 		diff[1]=0;
 		glBegin(GL_POINTS);
-			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]);
+			if (diff.length() < 90) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]);
 			diff[0]-=200;
-			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0]+200,	currentStar[1],currentStar[2]);
+			if (diff.length() < 90) glVertexAttrib3f(0,currentStar[0]+200,	currentStar[1],currentStar[2]);
 			diff[0]+=200; diff[2]-=200;
-			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]+200);
+			if (diff.length() < 90) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]+200);
 			diff[0]+=200; diff[2]+=200;
-			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0]-200,	currentStar[1],currentStar[2]);
+			if (diff.length() < 90) glVertexAttrib3f(0,currentStar[0]-200,	currentStar[1],currentStar[2]);
 			diff[0]-=200; diff[2]+=200;
-			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]-200);
+			if (diff.length() < 90) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]-200);
 		glEnd();
 	}
 }
 
-void RailsState::renderBasic() {
+void RailsState::renderBasic(int fps) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
@@ -145,13 +149,13 @@ void RailsState::renderBasic() {
 	}
 	Root::textureManager->BindTexture("White");
 	rails->drawRails(camera);
-	drawSky(glslProgram);
+	drawSky(glslProgram, fps);
 	rails->drawActors(camera, "Basic");
 	glslProgram->disable();
 
 }
 
-void RailsState::renderGlow() {
+void RailsState::renderGlow(int fps) {
 	glowBuffer->bind();
 		GLenum mrt[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT};
 		glDrawBuffers(2, mrt);
@@ -192,7 +196,7 @@ void RailsState::renderGlow() {
 		}
 		Root::textureManager->BindTexture("White");
 		rails->drawRails(camera);
-		drawSky(glslProgram);
+		drawSky(glslProgram, fps);
 		rails->drawActors(camera, "Glow");
 		glslProgram->disable();
 	glowBuffer->unbind();
