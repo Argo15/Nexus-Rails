@@ -205,6 +205,8 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	}
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
+	Vector3 futurePosition = calculateSplinePoint(p+0.01, currentRail, localSegment);
+	futurePosition[1] += 0.95;
 	if (position[0] == -3000) {
 		return;
 	}
@@ -218,15 +220,17 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
 	camera->recalculate();
 	
-	Vector3 look = finalCamPos - lastPosition;
+	Vector3 look = futurePosition - position;
 	look = look.normalize();
-	look[1] -= 0.5;
-	if (transitionPercent <= 0.999 || flickerFix) {
-		look = lastLook;
-		if (transitionPercent > 0.99999) {
-			flickerFix = false;
-		}
-	}
+	//look[1] -= 0.5;
+	//if (transitionPercent <= 0.999 || flickerFix) {
+	//	look = lastLook;
+	//	if (transitionPercent > 0.999) {
+	//		flickerFix = false;
+	//	}
+	//}
+	//look = look*transitionPercent + futurePosition*(1.0-transitionPercent);
+
 	Vector3 camPos = camera->geteyeV();
 	camera->setLookAt(camPos[0]+look[0], camPos[1]+look[1], camPos[2]+look[2]);
 	camera->setUp(0,1.0,0);
