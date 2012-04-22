@@ -93,15 +93,15 @@ void RailsState::drawSky(GLSLProgram *glslProgram) {
 		Vector3 diff = Vector3(camPos-currentStar);
 		diff[1]=0;
 		glBegin(GL_POINTS);
-			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]);
+			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]);
 			diff[0]-=200;
-			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0]+200,	currentStar[1],currentStar[2]);
+			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0]+200,	currentStar[1],currentStar[2]);
 			diff[0]+=200; diff[2]-=200;
-			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]+200);
+			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]+200);
 			diff[0]+=200; diff[2]+=200;
-			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0]-200,	currentStar[1],currentStar[2]);
+			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0]-200,	currentStar[1],currentStar[2]);
 			diff[0]-=200; diff[2]+=200;
-			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]-200);
+			if (diff.length() < 80) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]-200);
 		glEnd();
 	}
 }
