@@ -180,12 +180,10 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
 			if (it->first == currentRail) {
 				transitionPos = camera->geteyeV();
-				lastLookDir = camera->getLookAt() - camera->geteyeV();
 				currentRail = it->second;
 				transitionPercent = 0.0f;
 			} else if (it->second == currentRail) {
 				transitionPos = camera->geteyeV();
-				lastLookDir = camera->getLookAt() - camera->geteyeV();
 				currentRail = it->first;
 				transitionPercent = 0.0f;
 			}
@@ -209,19 +207,20 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	position[1] += 1.0;
 	Vector3 finalCamPos = position*transitionPercent + transitionPos*(1.0-transitionPercent);
 	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
-
-	Vector3 lookPosition = calculateSplinePoint(p+0.01, currentRail, localSegment);
-
-	if (transitionPercent <= 0.9999) {
-		lookPosition = camera->geteyeV() + lastLookDir;
-	} else {
-		lookPosition[1] += 0.95;
-	}
+	camera->recalculate();
 	
-	if (lookPosition[0] != -3000) {
-		camera->setLookAt(lookPosition[0], lookPosition[1], lookPosition[2]);
-		camera->setUp(0.0,1.0,0.0);
-	} 
+	Vector3 look = finalCamPos - lastPosition;
+	look = look.normalize();
+	look[1] -= 0.5;
+	if (transitionPercent <= 0.999)
+		look = lastLook;
+	Vector3 camPos = camera->geteyeV();
+	camera->setLookAt(camPos[0]+look[0], camPos[1]+look[1], camPos[2]+look[2]);
+	camera->setUp(0,1.0,0);
+
+	lastPosition = finalCamPos;
+	lastLook = look;
+	
 
 	Root::MIDIPLAYER->playRail(speed,currentRail);
 }

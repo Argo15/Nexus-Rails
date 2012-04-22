@@ -24,8 +24,10 @@ private:
 	vector<Actor *> *actors;
 
 	Vector3 transitionPos;
-	Vector3 lastLookDir;
 	float transitionPercent;
+
+	Vector3 lastPosition;
+	Vector3 lastLook;
 
 	float speed;
 

@@ -41,10 +41,10 @@ void RailsState::tick(int fps) {
 	}
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
+	camera->mouseRotate();
 
 	if (cameraMode) {
 		camera->move(fps/20);
-		camera->mouseRotate();
 	} else {
 		rails->updateTime(camera,fps/6000.0);
 	}
