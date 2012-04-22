@@ -223,7 +223,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	look[1] -= 0.5;
 	if (transitionPercent <= 0.999 || flickerFix) {
 		look = lastLook;
-		if (transitionPercent > 0.999) {
+		if (transitionPercent > 0.99999) {
 			flickerFix = false;
 		}
 	}
