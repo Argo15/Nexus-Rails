@@ -195,7 +195,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 		currentTime = startTimes[currentRail];
 		localSegment = 0;
 		speed = 0.008;
-		Root::MIDIPLAYER->die();
+		//Root::MIDIPLAYER->die();
 	}
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
@@ -225,7 +225,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	lastLook = look;
 	
 
-	Root::MIDIPLAYER->playRail(speed,currentRail);
+	//Root::MIDIPLAYER->playRail(speed,currentRail);
 }
 
 

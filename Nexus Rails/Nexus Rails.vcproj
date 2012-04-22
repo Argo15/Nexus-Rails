@@ -57,6 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="audiere.lib"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 			/>
@@ -238,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MusicPlayer.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Quaternion.cpp"
 				>
 			</File>
@@ -377,6 +382,10 @@
 			</File>
 			<File
 				RelativePath=".\ModelManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MusicPlayer.h"
 				>
 			</File>
 			<File

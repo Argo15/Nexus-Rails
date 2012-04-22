@@ -21,7 +21,8 @@ RailsState::RailsState() : GameState() {
 	clock = 0;
 	glowEnabled = true;
 	glowBuffer = new FBO();
-	Root::MIDIPLAYER->init();
+	//Root::MIDIPLAYER->init();
+	Root::MUSICPLAYER->init();
 }
 
 void RailsState::resize(int w, int h) {
