@@ -224,7 +224,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	lastLook = look;
 	
 
-	//Root::MIDIPLAYER->playRail(speed,currentRail);
+	Root::MIDIPLAYER->playRail(speed,currentRail);
 }
 
 
