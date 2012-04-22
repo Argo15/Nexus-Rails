@@ -172,7 +172,7 @@ void RailsManager::drawActors(Camera *camera, string shader) {
 // railColors: Rail, 0, rgb
 
 void RailsManager::updateTime(Camera *camera, float dt) {
-	currentTime += speed;
+	currentTime += max(speed,0.0f);
 	speed += dt*0.0025;
 	int currentSegment = (int)currentTime;
 	if (transitionPercent > 0.99 && (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d'))) {
@@ -203,6 +203,8 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	}
 	if (transitionPercent < 1.0) {
 		transitionPercent += dt*5.0;
+	} else {
+		transitionPercent = 1.0;
 	}
 	position[1] += 1.0;
 	Vector3 finalCamPos = position*transitionPercent + transitionPos*(1.0-transitionPercent);
@@ -222,7 +224,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	lastLook = look;
 	
 
-	Root::MIDIPLAYER->playRail(speed,currentRail);
+	//Root::MIDIPLAYER->playRail(speed,currentRail);
 }
 
 
