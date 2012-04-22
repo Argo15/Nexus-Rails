@@ -114,14 +114,14 @@ int Midi::init()
 
 	if(!midiOutOpen(&handle, DEFAULT_DEVICE, 0,0, CALLBACK_NULL))
 	{
-	midiOutShortMsg(handle, NoteC1);
-	Sleep(250);
+	//midiOutShortMsg(handle, NoteC1);
+	//Sleep(250);
 
-	midiOutShortMsg(handle, NoteE1);
-	Sleep(250);
+	//midiOutShortMsg(handle, NoteE1);
+	//Sleep(250);
 
-	midiOutShortMsg(handle, NoteG1);
-	Sleep(1500);
+	//midiOutShortMsg(handle, NoteG1);
+	//Sleep(1500);
 
 	}
 	else 
@@ -134,56 +134,242 @@ float countdown = 0;
 
 void Midi::playRail(float speed,int currentRail)
 {
-	//cout<<wait<<endl;
 	if(countdown <= 0)
 	{
-		playNextNote(currentRail,speed);
+		playNextNote(speed);
 		countdown = 100;
 	}
 	countdown-=speed*100;
 }
-int songOneIndex =0;
-int songOneMax = 42;
-char railOneSong[42][100];
-void Midi::playNextNote(int currentRail, float speed)
+int currentSong = 0;
+int songIndex[50];
+int SongMax[50];
+string Songs[50][100];
+void Midi::playNextNote(float speed)
 {
-	if(strcmp(railOneSong[songOneIndex],"A")==0)
+	cout<<speed<<endl;
+	if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"A")==0)
 	{
-		cout<<"its an A"<<endl;
-		midiOutShortMsg(handle, NoteA4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteA1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteA2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteA3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteA4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteA5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteA6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteA7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"B")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"B")==0)
 	{
-		cout<<"its an B"<<endl;
-		midiOutShortMsg(handle, NoteB4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteB1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteB2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteB3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteB4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteB5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteB6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteB7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"C")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"C")==0)
 	{
-		cout<<"its an C"<<endl;
-		midiOutShortMsg(handle, NoteC4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteC1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteC2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteC3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteC4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteC5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteC6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteC7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"D")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"D")==0)
 	{
-		cout<<"its an D"<<endl;
-		midiOutShortMsg(handle, NoteD4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteD1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteD2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteD3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteD4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteD5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteD6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteD7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"E")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"E")==0)
 	{
-		cout<<"its an E"<<endl;
-		midiOutShortMsg(handle, NoteE4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteE1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteE2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteE3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteE4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteE5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteE6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteE7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"F")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"F")==0)
 	{
-		cout<<"its an F"<<endl;
-		midiOutShortMsg(handle, NoteF4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteF1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteF2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteF3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteF4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteF5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteF6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteF7);
+		}
 	}
-	else if(strcmp(railOneSong[songOneIndex],"G")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"G")==0)
 	{
-		cout<<"its an G"<<endl;
-		midiOutShortMsg(handle, NoteG4);
+		if(speed < .01)
+		{
+			midiOutShortMsg(handle, NoteG1);
+		}
+		else if(speed < .02)
+		{
+			midiOutShortMsg(handle, NoteG2);
+		}
+		else if(speed < .03)
+		{
+			midiOutShortMsg(handle, NoteG3);
+		}
+		else if(speed < .04)
+		{
+			midiOutShortMsg(handle, NoteG4);
+		}
+		else if(speed < .05)
+		{
+			midiOutShortMsg(handle, NoteG5);
+		}
+		else if(speed < .06)
+		{
+			midiOutShortMsg(handle, NoteG6);
+		}
+		else if(speed >= .06)
+		{
+			midiOutShortMsg(handle, NoteG7);
+		}
 	}
-	songOneIndex++;
-	
+	songIndex[currentSong] = songIndex[currentSong]+1;
+	if(songIndex[currentSong] > SongMax[currentSong])
+	{
+		songIndex[currentSong] = 0;
+	}
 }
 void Midi::loadSongs()
 {
@@ -192,12 +378,11 @@ void Midi::loadSongs()
 	int count = 0;
 	while(song0.eof()==false)
 	{
-		song0.getline(railOneSong[count++],100);
+		char temp[100];
+		song0.getline(temp,100);
+		Songs[currentSong][count++] = string(temp);
+		SongMax[currentSong] = 42;
 	}
 	song0.close();
 
-	for(int x =0;x<42;x++)
-	{
-		cout<<railOneSong[x]<<endl;
-	}
 }
