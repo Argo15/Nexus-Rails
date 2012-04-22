@@ -4,7 +4,7 @@
 RailsState::RailsState() : GameState() {
 	glShadeModel(GL_SMOOTH);
 	glClearDepth(1.0f);
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.03f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
@@ -21,8 +21,10 @@ RailsState::RailsState() : GameState() {
 	clock = 0;
 	glowEnabled = true;
 	glowBuffer = new FBO();
-	//Root::MIDIPLAYER->init();
+
 	Root::MUSICPLAYER->init();
+	//Root::MIDIPLAYER->init();
+	generateSky();
 }
 
 void RailsState::resize(int w, int h) {
@@ -67,6 +69,43 @@ void RailsState::tick(int fps) {
 	glutSwapBuffers();
 }
 
+void RailsState::generateSky() {
+	numStars = 1200;
+	stars = new Vector3[numStars];
+
+	for (int i=0; i<numStars; i++) {
+		float x = (float)rand()/(float)RAND_MAX;
+		float y = (float)rand()/(float)RAND_MAX;
+		float z = (float)rand()/(float)RAND_MAX;
+		stars[i] = Vector3(x*200-100,y*20+200,z*200-100);
+	}
+}
+
+void RailsState::drawSky(GLSLProgram *glslProgram) {
+	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+	glslProgram->sendUniform("material.emission", 1.0f, 1.0f, 1.0f);
+	Vector3 camPos = camera->geteyeV();
+	int xPos = (camPos[0]+100)-((int)camPos[0]+100)%200;
+	int zPos = (camPos[2]+100)-((int)camPos[2]+100)%200;
+	for (int i=0; i<numStars; i++) {
+		Vector3 currentStar = stars[i]+Vector3(xPos,0,zPos);
+		glPointSize(2);
+		Vector3 diff = Vector3(camPos-currentStar);
+		diff[1]=0;
+		glBegin(GL_POINTS);
+			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]);
+			diff[0]-=200;
+			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0]+200,	currentStar[1],currentStar[2]);
+			diff[0]+=200; diff[2]-=200;
+			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]+200);
+			diff[0]+=200; diff[2]+=200;
+			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0]-200,	currentStar[1],currentStar[2]);
+			diff[0]-=200; diff[2]+=200;
+			if (diff.length() < 120) glVertexAttrib3f(0,currentStar[0],		currentStar[1],currentStar[2]-200);
+		glEnd();
+	}
+}
+
 void RailsState::renderBasic() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -86,9 +125,10 @@ void RailsState::renderBasic() {
 	glslProgram->sendUniform("camPos",camera->geteyeX(),camera->geteyeY(),camera->geteyeZ());
 
 	glActiveTexture(GL_TEXTURE0);
-	Root::textureManager->BindTexture("Grass");
+	Root::textureManager->BindTexture("Ground");
 	glslProgram->sendUniform("tex",0);
-	glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+	Vector3 color = rails->getRailColor();
+	glslProgram->sendUniform("material.color", color[0], color[1], color[2]);
 	glslProgram->sendUniform("material.emission", 0.0f, 0.0f, 0.0f);
 
 	for (float i=0; i<1.0; i += 0.01) {
@@ -105,6 +145,7 @@ void RailsState::renderBasic() {
 	}
 	Root::textureManager->BindTexture("White");
 	rails->drawRails(camera);
+	drawSky(glslProgram);
 	rails->drawActors(camera, "Basic");
 	glslProgram->disable();
 
@@ -132,9 +173,10 @@ void RailsState::renderGlow() {
 		glslProgram->sendUniform("camPos",camera->geteyeX(),camera->geteyeY(),camera->geteyeZ());
 
 		glActiveTexture(GL_TEXTURE0);
-		Root::textureManager->BindTexture("Grass");
+		Root::textureManager->BindTexture("Ground");
 		glslProgram->sendUniform("tex",0);
-		glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
+		Vector3 color = rails->getRailColor();
+		glslProgram->sendUniform("material.color", color[0], color[1], color[2]);
 		glslProgram->sendUniform("material.emission", 0.0f, 0.0f, 0.0f);
 		for (float i=0; i<1.0; i += 0.01) {
 			for (float j=0; j<1.0; j += 0.01) {
@@ -150,6 +192,7 @@ void RailsState::renderGlow() {
 		}
 		Root::textureManager->BindTexture("White");
 		rails->drawRails(camera);
+		drawSky(glslProgram);
 		rails->drawActors(camera, "Glow");
 		glslProgram->disable();
 	glowBuffer->unbind();
