@@ -37,8 +37,8 @@ public:
 
 	void updateTime(Camera *camera, float dt);
 	void reloadRails();
-	void drawRails();
-	void drawActors();
+	void drawRails(Camera *camera);
+	void drawActors(Camera *camera, string shader);
 	Vector3 calculateSplinePoint(float,int,int); 
 };
 

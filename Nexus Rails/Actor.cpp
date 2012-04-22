@@ -17,7 +17,7 @@ void Actor::drawActor(string shader)
 {
 	GLSLProgram *glslProgram = Root::shaderManager->getShader(shader);
 	glslProgram->sendUniform("modelviewMatrix", &Root::ModelviewMatrix.top()[0][0]);
-	glslProgram->sendUniform("material.emission", 0.0f, 0.0f, 0.0f);
+	glslProgram->sendUniform("material.emission", emission[0], emission[1], emission[2]);
 	glActiveTextureARB(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 	Root::textureManager->BindTexture(*material);

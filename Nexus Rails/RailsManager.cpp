@@ -69,11 +69,15 @@ void RailsManager::reloadRails() {
 		while (output[0] != 'x' || output2[0] != 'x') {
 			int pos[3];
 			int scale[3];
-			myReadFile >> output >> output2 >> pos[0] >> pos[1] >> pos[2] >> scale[0] >> scale[1] >> scale[2];
+			float glow[3];
+			myReadFile >> output >> output2 >> pos[0] >> pos[1] >> pos[2] >> scale[0] >> scale[1] >> scale[2] >> glow[0] >> glow[1] >> glow[2];
 			if (output[0] != 'x' || output2[0] != 'x') {
 				Actor *newActor = new Actor(new string(output), new string(output2));
 				newActor->setTranslate(pos[0],pos[1],pos[2]);
 				newActor->setScale(scale[0],scale[1],scale[2]);
+				newActor->emission[0] = glow[0];
+				newActor->emission[1] = glow[1];
+				newActor->emission[2] = glow[2];
 				actors->push_back(newActor);
 			}
 		}
@@ -82,7 +86,7 @@ void RailsManager::reloadRails() {
 	}
 }
 
-void RailsManager::drawRails() {
+void RailsManager::drawRails(Camera *camera) {
 	//int numSubDivides = 10.0;
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
 	//glLineWidth(10.0);
@@ -98,6 +102,8 @@ void RailsManager::drawRails() {
 	//}
 	//glEnd();
 	glLineWidth(10.0);
+	Vector3 camPos = camera->geteyeV();
+	camPos[1]=0;
 	for (int railID=0; railID<numRails; railID++) {
 		glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
 		glslProgram->sendUniform("material.emission", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
@@ -116,7 +122,7 @@ void RailsManager::drawRails() {
 				float t = (float)i/nsegment;
 				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
-				if(pts[i][0]!=-3000)
+				if(pts[i][0]!=-3000 && Vector3(camPos-pts[i]).length() < 100.0)
 				{
 					glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
 				}
@@ -140,18 +146,24 @@ void RailsManager::drawRails() {
 			glPointSize(25);
 			glBegin(GL_POINTS);
 				Vector3 pnt = calculateSplinePoint(0,railID,startingPoint);
-				glVertex3f(pnt[0],pnt[1],pnt[2]);
+				if (Vector3(camPos-pnt).length() < 150.0) {
+					glVertex3f(pnt[0],pnt[1],pnt[2]);
+				}
 			glEnd();
 		}
 	}
 }
 
-void RailsManager::drawActors() {
+void RailsManager::drawActors(Camera *camera, string shader) {
+	Vector3 camPos = camera->geteyeV();
+	camPos[1]=0;
 	for (vector<Actor *>::iterator it = actors->begin(); it != actors->end(); it++) {
 		Actor *actor = (*it);
 		Root::ModelviewMatrix.push(Root::ModelviewMatrix.top());
-			actor->transformToMatrix(&Root::ModelviewMatrix.top());
-			actor->drawActor("Basic");
+			if (Vector3(camPos-actor->getTranslateV()).length() < 150.0) {
+				actor->transformToMatrix(&Root::ModelviewMatrix.top());
+				actor->drawActor(shader);
+			}
 		Root::ModelviewMatrix.pop();
 	}
 }
@@ -196,6 +208,12 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	Vector3 finalCamPos = position*transitionPercent + transitionPos*(1.0-transitionPercent);
 	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
 	camera->recalculate();
+	Vector3 lookPosition = calculateSplinePoint(p+0.01, currentRail, localSegment);
+	lookPosition[1] += 0.95;
+	if (lookPosition[0] != -3000 && transitionPercent > 0.9999) {
+		camera->setLookAt(lookPosition[0], lookPosition[1], lookPosition[2]);
+		camera->setUp(0.0,1.0,0.0);
+	}
 
 	Root::MIDIPLAYER->playRail(speed,currentRail);
 }

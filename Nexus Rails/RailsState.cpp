@@ -42,9 +42,9 @@ void RailsState::tick(int fps) {
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
 
-	camera->mouseRotate();
 	if (cameraMode) {
 		camera->move(fps/20);
+		camera->mouseRotate();
 	} else {
 		rails->updateTime(camera,fps/6000.0);
 	}
@@ -103,8 +103,8 @@ void RailsState::renderBasic() {
 		}
 	}
 	Root::textureManager->BindTexture("White");
-	rails->drawRails();
-	rails->drawActors();
+	rails->drawRails(camera);
+	rails->drawActors(camera, "Basic");
 	glslProgram->disable();
 
 }
@@ -148,8 +148,8 @@ void RailsState::renderGlow() {
 			}
 		}
 		Root::textureManager->BindTexture("White");
-		rails->drawRails();
-		rails->drawActors();
+		rails->drawRails(camera);
+		rails->drawActors(camera, "Glow");
 		glslProgram->disable();
 	glowBuffer->unbind();
 

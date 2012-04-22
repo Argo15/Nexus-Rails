@@ -14,6 +14,8 @@ private:
 	string *material;
 	
 public:
+	float emission[3];
+
 	Actor(string *model = 0, string *material = 0);
 	~Actor(){}
 
