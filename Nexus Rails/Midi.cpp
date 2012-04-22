@@ -147,8 +147,7 @@ int SongMax[50];
 string Songs[50][100];
 void Midi::playNextNote(float speed)
 {
-	cout<<speed<<endl;
-	if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"A")==0)
+	if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"a")==0)
 	{
 		if(speed < .01)
 		{
@@ -179,7 +178,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteA7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"B")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"b")==0)
 	{
 		if(speed < .01)
 		{
@@ -210,7 +209,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteB7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"C")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"c")==0)
 	{
 		if(speed < .01)
 		{
@@ -241,7 +240,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteC7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"D")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"d")==0)
 	{
 		if(speed < .01)
 		{
@@ -272,7 +271,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteD7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"E")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"e")==0)
 	{
 		if(speed < .01)
 		{
@@ -303,7 +302,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteE7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"F")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"f")==0)
 	{
 		if(speed < .01)
 		{
@@ -334,7 +333,7 @@ void Midi::playNextNote(float speed)
 			midiOutShortMsg(handle, NoteF7);
 		}
 	}
-	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"G")==0)
+	else if(strcmp(Songs[currentSong][songIndex[currentSong]].c_str(),"g")==0)
 	{
 		if(speed < .01)
 		{
@@ -374,7 +373,7 @@ void Midi::playNextNote(float speed)
 void Midi::loadSongs()
 {
 	ifstream song0;
-	song0.open("Data/Rail0Song.txt");
+	song0.open("Data/Rail0Song2.txt");
 	int count = 0;
 	while(song0.eof()==false)
 	{
