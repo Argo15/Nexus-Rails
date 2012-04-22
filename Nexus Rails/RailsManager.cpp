@@ -231,6 +231,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	//	}
 	//}
 	//look = look*transitionPercent + futurePosition*(1.0-transitionPercent);
+
 	Vector3 camPos = camera->geteyeV();
 	camera->setLookAt(camPos[0]+look[0], camPos[1]+look[1], camPos[2]+look[2]);
 	camera->setUp(0,1.0,0);
