@@ -422,11 +422,19 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\Data\Shaders\f_final.glsl"
+				>
+			</File>
+			<File
 				RelativePath=".\Data\Shaders\f_glow.glsl"
 				>
 			</File>
 			<File
 				RelativePath=".\Data\Shaders\f_material.glsl"
+				>
+			</File>
+			<File
+				RelativePath=".\Data\Shaders\v_final.glsl"
 				>
 			</File>
 			<File

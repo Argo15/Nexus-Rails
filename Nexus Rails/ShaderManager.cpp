@@ -23,6 +23,7 @@ void ShaderManager::Initialize()
 {
 	LoadShader("Basic", "Data/Shaders/v_material.glsl","Data/Shaders/f_material.glsl");
 	LoadShader("Glow", "Data/Shaders/v_glow.glsl","Data/Shaders/f_glow.glsl");
+	LoadShader("Final", "Data/Shaders/v_final.glsl","Data/Shaders/f_final.glsl");
 }
 
 void ShaderManager::LoadShader(string name, string vertexShader, string fragmentShader)

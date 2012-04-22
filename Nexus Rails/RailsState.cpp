@@ -19,7 +19,7 @@ RailsState::RailsState() : GameState() {
 	cameraMode = true;
 	rails->reloadRails();
 	clock = 0;
-	glowEnabled = false;
+	glowEnabled = true;
 	glowBuffer = new FBO();
 	Root::MIDIPLAYER->init();
 }
@@ -153,10 +153,14 @@ void RailsState::renderGlow() {
 		glslProgram->disable();
 	glowBuffer->unbind();
 
+	glslProgram = Root::shaderManager->getShader("Final");
+	glslProgram->use();
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
 	view->use3D(false);
+	glslProgram->sendUniform("projectionMatrix", &Root::ProjectionMatrix.top()[0][0]);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -167,12 +171,28 @@ void RailsState::renderGlow() {
 
 	glDisable(GL_CULL_FACE);
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, glowBuffer->getColorTexture());
+	glslProgram->sendUniform("colorTex",0);
+	glActiveTexture(GL_TEXTURE1);
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, glowBuffer->getEmissionTexture());
+	glslProgram->sendUniform("emissionTex",1);
+
+	glBindAttribLocation(glslProgram->getHandle(), 0, "v_vertex");
+	glBindAttribLocation(glslProgram->getHandle(), 1, "v_texture");
+	
 	glBegin(GL_QUADS);
-		glTexCoord2f(0,0); glVertex3f(0,0,-1.0);
-		glTexCoord2f(0,1.0); glVertex3f(0,1.0,-1.0);
-		glTexCoord2f(1.0,1.0); glVertex3f(1.0,1.0,-1.0);
-		glTexCoord2f(1.0,0); glVertex3f(1.0,0,-1.0);
+		glVertexAttrib2f(1,0,0);	glVertexAttrib3f(0,0,0,-1.0);
+		glVertexAttrib2f(1,0,1.0);	glVertexAttrib3f(0,0,1.0,-1.0);
+		glVertexAttrib2f(1,1.0,1.0);glVertexAttrib3f(0,1.0,1.0,-1.0);
+		glVertexAttrib2f(1,1.0,0);	glVertexAttrib3f(0,1.0,0,-1.0);
 	glEnd();
 
+	glActiveTexture(GL_TEXTURE1);
+	glDisable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	glEnable(GL_TEXTURE_2D);
+
+	glslProgram->disable();
 }
