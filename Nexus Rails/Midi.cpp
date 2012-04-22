@@ -137,7 +137,7 @@ void Midi::playRail(float speed,int currentRail)
 	if(countdown <= 0)
 	{
 		playNextNote(speed);
-		countdown = 100;
+		countdown = 50;
 	}
 	countdown-=speed*100;
 }
