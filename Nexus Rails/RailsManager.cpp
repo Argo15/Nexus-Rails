@@ -197,7 +197,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	camera->setPosition(finalCamPos[0],finalCamPos[1],finalCamPos[2]);
 	camera->recalculate();
 
-	Root::MIDIPLAYER->playRail(speed);
+	Root::MIDIPLAYER->playRail(speed,currentRail);
 }
 
 
