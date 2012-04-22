@@ -11,6 +11,7 @@ InputManager::InputManager()
 	mouseX = 0;
 	mouseY = 0;
 	mouseCentered = false;
+	anyKey = true;
 }
 
 void InputManager::registerKeyDown(int key)

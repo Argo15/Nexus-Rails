@@ -61,6 +61,8 @@ void render(void) {
 void keyDown(unsigned char key, int xx, int yy) {
 	if (key == 27) exit(0);
 	Root::inputManager->registerKeyDown((int)key);
+	if (key != 'c' && key != 'g')
+		Root::inputManager->setAnyKey(true);
 }
 
 void keyUp(unsigned char key, int xx, int yy) {
@@ -84,7 +86,7 @@ void mouseReleasedMove(int x, int y) {
 
 void specialKeyDown(int key, int xx, int yy)
 {
-
+	Root::inputManager->setAnyKey(true);
 }
 
 void mouseWheel(int button, int dir, int x, int y)

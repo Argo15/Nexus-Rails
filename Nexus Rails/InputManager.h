@@ -9,6 +9,7 @@ private:
 	int mouseX, mouseY;
 	bool mouseCentered;
 	bool mouseMoved;
+	bool anyKey;
 
 public:
 	InputManager();
@@ -27,6 +28,11 @@ public:
 	int getMouseX() {return mouseX;}
 	int getMouseY() {return mouseY;}
 	bool isMouseMoved() {return mouseMoved;}
+
+	void setAnyKey(bool val) {anyKey = val;}
+	bool isAnyKey() {
+		if (anyKey) { anyKey = false; return true;} else { return false; } 
+	}
 };
 
 #endif

@@ -16,6 +16,8 @@ RailsManager::RailsManager() {
 	transitionPercent = 1.0;
 	speed = 0.008;
 	actors = 0;
+	previousRail = 0;
+	flickerFix = false;
 }
 
 void RailsManager::reloadRails() {
@@ -122,7 +124,7 @@ void RailsManager::drawRails(Camera *camera) {
 				float t = (float)i/nsegment;
 				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
-				if(pts[i][0]!=-3000 && Vector3(camPos-pts[i]).length() < 100.0)
+				if(pts[i][0]!=-3000 && Vector3(camPos-pts[i]).length() < 150.0)
 				{
 					glVertex3f(pts[i][0],pts[i][1],pts[i][2]);
 				}
@@ -175,17 +177,21 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	currentTime += max(speed,0.0f);
 	speed += dt*0.0025;
 	int currentSegment = (int)currentTime;
-	if (transitionPercent > 0.99 && (Root::inputManager->isKeyDownOnce('a') || Root::inputManager->isKeyDownOnce('d'))) {
+	if (transitionPercent > 0.99 && (Root::inputManager->isAnyKey())) {
 		vector<Connection> segConnections = connections[currentSegment];
 		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
 			if (it->first == currentRail) {
 				transitionPos = camera->geteyeV();
+				previousRail = currentRail;
 				currentRail = it->second;
 				transitionPercent = 0.0f;
+				flickerFix = true;
 			} else if (it->second == currentRail) {
 				transitionPos = camera->geteyeV();
+				previousRail = currentRail;
 				currentRail = it->first;
 				transitionPercent = 0.0f;
+				flickerFix = true;
 			}
 		}
 	}
@@ -215,8 +221,12 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	Vector3 look = finalCamPos - lastPosition;
 	look = look.normalize();
 	look[1] -= 0.5;
-	if (transitionPercent <= 0.999)
+	if (transitionPercent <= 0.999 || flickerFix) {
 		look = lastLook;
+		if (transitionPercent > 0.999) {
+			flickerFix = false;
+		}
+	}
 	Vector3 camPos = camera->geteyeV();
 	camera->setLookAt(camPos[0]+look[0], camPos[1]+look[1], camPos[2]+look[2]);
 	camera->setUp(0,1.0,0);
@@ -283,4 +293,9 @@ Vector3 RailsManager::calculateSplinePoint(float t, int railID, int startingPoin
 	total+=point2;
 	total+=point3;
 	return total;
+}
+
+
+Vector3 RailsManager::getRailColor() {
+	return railColors[currentRail][0]*transitionPercent + railColors[previousRail][0]*(1.0-transitionPercent);
 }

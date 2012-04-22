@@ -24,8 +24,14 @@ private:
 	bool glowEnabled;
 	FBO *glowBuffer;
 
+	int numStars;
+	Vector3 *stars;
+
 	void renderBasic();
 	void renderGlow();
+
+	void generateSky();
+	void drawSky(GLSLProgram *glslProgram);
 
 public:
 	RailsState();
