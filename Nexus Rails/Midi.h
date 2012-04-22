@@ -7,7 +7,7 @@ class Midi
 public:
 	int init();
 	void playRail(float,int);
-	void playNextNote(int,float);
+	void playNextNote(float);
 private:
 	void loadSongs();
 };
