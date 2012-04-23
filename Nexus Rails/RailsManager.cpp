@@ -14,7 +14,7 @@ RailsManager::RailsManager() {
 	startTimes = 0;
 	connections = 0;
 	transitionPercent = 1.0;
-	speed = 0.008;
+	speed = 0.01;
 	actors = 0;
 	previousRail = 0;
 	flickerFix = false;
@@ -175,8 +175,8 @@ void RailsManager::drawActors(Camera *camera, string shader) {
 
 void RailsManager::updateTime(Camera *camera, float dt) {
 	currentTime += max(speed,0.0f);
-	if (speed < 0.035)
-		speed += dt*0.0025;
+	if (speed < 0.050)
+		speed += dt*0.004;
 	int currentSegment = (int)currentTime;
 	if (transitionPercent > 0.99 && (Root::inputManager->isAnyKey())) {
 		vector<Connection> segConnections = connections[currentSegment];
@@ -203,7 +203,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	if (localSegment >= railPositions[currentRail].size()-3) {	// crash into end
 		currentTime = startTimes[currentRail];
 		localSegment = 0;
-		speed = 0.008;
+		speed = 0.01;
 		//Root::MIDIPLAYER->die();
 	}
 	float p = currentTime - (int)currentTime;
