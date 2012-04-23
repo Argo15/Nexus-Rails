@@ -175,7 +175,7 @@ void RailsManager::drawActors(Camera *camera, string shader) {
 
 void RailsManager::updateTime(Camera *camera, float dt) {
 	currentTime += max(speed,0.0f);
-	if (speed < 0.50)
+	if (speed < 0.500)
 		speed += dt*0.004;
 	int currentSegment = (int)currentTime;
 	if (transitionPercent > 0.99 && (Root::inputManager->isAnyKey())) {
