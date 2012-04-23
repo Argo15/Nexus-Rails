@@ -47,18 +47,16 @@ void RailsState::tick(int fps) {
 
 	if (cameraMode) {
 		camera->move(180/fps);
-		//cameraMode = false;
-		//return;
 	} else {
 		camera->move(180/fps);
 		rails->updateTime(camera,0.6/fps);
 	}
-	if (Root::inputManager->isKeyDownOnce('c')) {
+	if (Root::inputManager->isKeyDownOnce('2')) {
 		cameraMode = !cameraMode;
 	}
 	view->use3D(true);
 
-	if (Root::inputManager->isKeyDownOnce('g')) {
+	if (Root::inputManager->isKeyDownOnce('1')) {
 		glowEnabled = !glowEnabled;
 	}
 

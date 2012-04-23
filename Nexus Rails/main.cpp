@@ -61,7 +61,7 @@ void render(void) {
 void keyDown(unsigned char key, int xx, int yy) {
 	if (key == 27) exit(0);
 	Root::inputManager->registerKeyDown((int)key);
-	if (key != 'c' && key != 'g')
+	if (key != '1' && key != '2')
 		Root::inputManager->setAnyKey(true);
 }
 
