@@ -47,9 +47,9 @@ void RailsState::tick(int fps) {
 	camera->mouseRotate();
 
 	if (cameraMode) {
-		camera->move(fps/20);
+		camera->move(180/fps);
 	} else {
-		rails->updateTime(camera,fps/6000.0);
+		rails->updateTime(camera,0.6/fps);
 	}
 	if (Root::inputManager->isKeyDownOnce('c')) {
 		cameraMode = !cameraMode;
@@ -70,7 +70,7 @@ void RailsState::tick(int fps) {
 }
 
 void RailsState::generateSky() {
-	numStars = 1200;
+	numStars = 1000;
 	stars = new Vector3[numStars];
 
 	for (int i=0; i<numStars; i++) {
@@ -88,9 +88,6 @@ void RailsState::drawSky(GLSLProgram *glslProgram, int fps) {
 	int xPos = (camPos[0]+100)-((int)camPos[0]+100)%200;
 	int zPos = (camPos[2]+100)-((int)camPos[2]+100)%200;
 	int count = numStars;
-	if (fps < 58) {
-		count /= 2;
-	}
 	for (int i=0; i<count; i++) {
 		Vector3 currentStar = stars[i]+Vector3(xPos,0,zPos);
 		glPointSize(2);
@@ -241,6 +238,8 @@ void RailsState::renderGlow(int fps) {
 	glDisable(GL_TEXTURE_2D);
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
+
+	glEnable(GL_CULL_FACE);
 
 	glslProgram->disable();
 }
