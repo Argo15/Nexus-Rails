@@ -43,8 +43,8 @@ void RailsManager::reloadRails() {
 		for (int i=0; i<numRails; i++) {
 			myReadFile >> output >> iOutput;
 			myReadFile >> output >> startTimes[i];
-			int color[3];
-			int pos[3];
+			float color[3];
+			float pos[3];
 			pos[0] = 0;
 			myReadFile >> color[0] >> color[1] >> color[2];
 			railColors[i] = new Vector3(color[0], color[1], color[2]);
@@ -69,8 +69,8 @@ void RailsManager::reloadRails() {
 		}
 
 		while (output[0] != 'x' || output2[0] != 'x') {
-			int pos[3];
-			int scale[3];
+			float pos[3];
+			float scale[3];
 			float glow[3];
 			myReadFile >> output >> output2 >> pos[0] >> pos[1] >> pos[2] >> scale[0] >> scale[1] >> scale[2] >> glow[0] >> glow[1] >> glow[2];
 			if (output[0] != 'x' || output2[0] != 'x') {

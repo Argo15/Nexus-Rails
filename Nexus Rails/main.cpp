@@ -39,8 +39,13 @@ void render(void) {
 	int lastTime = currentTime;
 	currentTime = glutGet( GLUT_ELAPSED_TIME );
 	int timePassed = currentTime - lastTime;
+	vsync += timePassed;
 	
-	float fps = 1000.0f/timePassed;
+	if (vsync > (1000/60)){
+		float fps = 1000.0f/timePassed;
+		if (fps > 60)
+			fps=60;
+		vsync = 0;
 
 		char buffer[5];
 		_itoa((int)fps, buffer, 10);
@@ -49,6 +54,7 @@ void render(void) {
 		
 		Root::GAMESTATE->tick((int)fps);
 		counter++;
+	}
 	
 }
 
