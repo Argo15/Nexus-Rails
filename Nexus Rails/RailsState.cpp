@@ -16,7 +16,7 @@ RailsState::RailsState() : GameState() {
 	camera = new Camera();
 	frustum = new Frustum();
 	rails = new RailsManager();
-	cameraMode = true;
+	cameraMode = false;
 	rails->reloadRails();
 	clock = 0;
 	glowEnabled = true;
@@ -44,11 +44,13 @@ void RailsState::tick(int fps) {
 	}
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);
-	camera->mouseRotate();
 
 	if (cameraMode) {
 		camera->move(180/fps);
+		//cameraMode = false;
+		//return;
 	} else {
+		camera->move(180/fps);
 		rails->updateTime(camera,0.6/fps);
 	}
 	if (Root::inputManager->isKeyDownOnce('c')) {
@@ -148,6 +150,7 @@ void RailsState::renderBasic(int fps) {
 	rails->drawRails(camera);
 	drawSky(glslProgram, fps);
 	rails->drawActors(camera, "Basic");
+	rails->drawGrade(camera, "Basic");
 	glslProgram->disable();
 
 }
@@ -195,6 +198,7 @@ void RailsState::renderGlow(int fps) {
 		rails->drawRails(camera);
 		drawSky(glslProgram, fps);
 		rails->drawActors(camera, "Glow");
+		rails->drawGrade(camera, "Glow");
 		glslProgram->disable();
 	glowBuffer->unbind();
 

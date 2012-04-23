@@ -33,6 +33,8 @@ private:
 	float speed;
 	bool flickerFix;
 
+	int numMisses;
+
 	float currentTime;	// Time = num segments since start of rail 0
 	int currentRail;	// Starts on 0
 	int previousRail;
@@ -46,6 +48,7 @@ public:
 	void reloadRails();
 	void drawRails(Camera *camera);
 	void drawActors(Camera *camera, string shader);
+	void drawGrade(Camera *camera, string shader);
 	Vector3 calculateSplinePoint(float,int,int); 
 	Vector3 getRailColor();
 };

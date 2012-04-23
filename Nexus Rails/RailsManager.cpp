@@ -20,6 +20,7 @@ RailsManager::RailsManager() {
 	actors = 0;
 	previousRail = 0;
 	flickerFix = false;
+	numMisses = 0;
 }
 
 void RailsManager::reloadRails() {
@@ -174,8 +175,10 @@ void RailsManager::drawRails(Camera *camera) {
 			glBegin(GL_LINE_STRIP);
 			for(int i =0;i<bsplinePositions[railID].size()-1;i++)
 			{
-				glVertex3f((bsplinePositions[railID][i])[0][0],(bsplinePositions[railID][i])[0][1],(bsplinePositions[railID][i])[0][2]);
-				//cout<<(bsplinePositions[railID][i])[0][0]<<endl;
+				if (Vector3(camPos-Vector3((bsplinePositions[railID][i])[0][0],(bsplinePositions[railID][i])[0][1],(bsplinePositions[railID][i])[0][2])).length() < 120.0) {
+					glVertex3f((bsplinePositions[railID][i])[0][0],(bsplinePositions[railID][i])[0][1],(bsplinePositions[railID][i])[0][2]);
+					//cout<<(bsplinePositions[railID][i])[0][0]<<endl;
+				}
 			}
 			glEnd();
 		}
@@ -187,7 +190,7 @@ void RailsManager::drawRails(Camera *camera) {
 		//}
 		//glEnd();
 	//}
-	for (int railID=0; railID<numRails; railID++) {
+	/*for (int railID=0; railID<numRails; railID++) {
 		int npts = railPositions[railID].size()-1;
 		for(int startingPoint = 0 ; startingPoint < npts;startingPoint++) {
 			glslProgram->sendUniform("material.color", 1.0f, 1.0f, 1.0f);
@@ -200,7 +203,7 @@ void RailsManager::drawRails(Camera *camera) {
 				}
 			glEnd();
 		}
-	}
+	}*/
 /*
 glMatrixMode(GL_PROJECTION);
 glPushMatrix();
@@ -237,6 +240,28 @@ void RailsManager::drawActors(Camera *camera, string shader) {
 	}
 }
 
+void RailsManager::drawGrade(Camera *camera, string shader) {
+
+	Actor actor;
+	if (numMisses <= 1) {
+		actor = Actor(new string("A"),new string("Black"));
+	} else if (numMisses <= 5) {
+		actor = Actor(new string("B"),new string("Black"));
+	} else if (numMisses <= 10) {
+		actor = Actor(new string("C"),new string("Black"));
+	} else {
+		actor = Actor(new string("D"),new string("Black"));
+	}
+	actor.setTranslate(19,28.7,-105);
+	actor.emission[0]=1.0;
+	actor.emission[1]=1.0;
+	Root::ModelviewMatrix.push(Root::ModelviewMatrix.top());
+			actor.transformToMatrix(&Root::ModelviewMatrix.top());
+			actor.drawActor(shader);
+
+	Root::ModelviewMatrix.pop();
+}
+
 // railPositions: Rail, Segment, 0, xyz
 // railColors: Rail, 0, rgb
 
@@ -268,11 +293,26 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	int localSegment = (int)currentTime - startTimes[currentRail];
 	if (localSegment < 0) return;	
 	if (localSegment >= railPositions[currentRail].size()-3) {	// crash into end
-		currentTime = startTimes[currentRail];
-		localSegment = 0;
-		speed = 0.01;
-		//Root::MIDIPLAYER->die();
-		Root::MUSICPLAYER->hurtSound();
+		if (currentRail == 18) { // last rail
+			speed -= dt*0.02;
+			Root::MUSICPLAYER->setSpeed(speed);
+			if (Root::inputManager->isKeyDownOnce('r')) {
+				currentRail = 0;
+				currentTime = 0;
+				speed = 0.01;
+				numMisses = 0;
+			}
+			return;
+		} else {
+			currentTime = startTimes[currentRail];
+			localSegment = 0;
+			if (currentRail > 0) {
+				numMisses++;
+			}
+			speed = max(0.01f,speed*(2.0f/3.0f));
+			//Root::MIDIPLAYER->die();
+			Root::MUSICPLAYER->hurtSound();
+		}
 	}
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
