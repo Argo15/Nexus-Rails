@@ -27,11 +27,11 @@ private:
 	int numStars;
 	Vector3 *stars;
 
-	void renderBasic();
-	void renderGlow();
+	void renderBasic(int fps);
+	void renderGlow(int fps);
 
 	void generateSky();
-	void drawSky(GLSLProgram *glslProgram);
+	void drawSky(GLSLProgram *glslProgram, int fps);
 
 public:
 	RailsState();
