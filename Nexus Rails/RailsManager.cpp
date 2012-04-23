@@ -182,12 +182,14 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 		vector<Connection> segConnections = connections[currentSegment];
 		for (vector<Connection>::iterator it = segConnections.begin(); it != segConnections.end(); it++) {
 			if (it->first == currentRail) {
+				Root::MUSICPLAYER->jumpSound();
 				transitionPos = camera->geteyeV();
 				previousRail = currentRail;
 				currentRail = it->second;
 				transitionPercent = 0.0f;
 				flickerFix = true;
 			} else if (it->second == currentRail) {
+				Root::MUSICPLAYER->jumpSound();
 				transitionPos = camera->geteyeV();
 				previousRail = currentRail;
 				currentRail = it->first;
@@ -241,6 +243,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 	
 
 	//Root::MIDIPLAYER->playRail(speed,currentRail);
+	Root::MUSICPLAYER->setSpeed(speed);
 }
 
 
