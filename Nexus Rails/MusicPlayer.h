@@ -7,6 +7,7 @@ class MusicPlayer
 public:
 	int init();
 	void jumpSound();
+	void hurtSound();
 	void setSpeed(float);
 private:
 };

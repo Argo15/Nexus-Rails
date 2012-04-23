@@ -9,6 +9,7 @@ using namespace std;
 AudioDevicePtr* device;
 OutputStreamPtr* music;
 OutputStreamPtr* jump;
+OutputStreamPtr* hurt;
 int MusicPlayer::init()
 {	
 	//init and play music
@@ -19,6 +20,9 @@ int MusicPlayer::init()
 
 	string jumpFile = "Data/Randomize7.wav";
      jump = new OutputStreamPtr(OpenSound(*device,jumpFile.c_str(), false));
+
+	 string hurtFile = "Data/hurt.wav";
+     hurt = new OutputStreamPtr(OpenSound(*device,hurtFile.c_str(), false));
    return 0;
 }
 float transition =0.0f;
@@ -49,4 +53,14 @@ void MusicPlayer::jumpSound()
 		(*jump)->reset();
 	}
 	(*jump)->play(); (*jump)->setRepeat(false); (*jump)->setVolume(1.0f);
+}
+
+void MusicPlayer::hurtSound()
+{
+	if((*hurt)->isPlaying())
+	{
+		(*hurt)->stop();
+		(*hurt)->reset();
+	}
+	(*hurt)->play(); (*hurt)->setRepeat(false); (*hurt)->setVolume(1.0f);
 }

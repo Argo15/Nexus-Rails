@@ -250,6 +250,7 @@ void RailsManager::updateTime(Camera *camera, float dt) {
 		localSegment = 0;
 		speed = 0.01;
 		//Root::MIDIPLAYER->die();
+		Root::MUSICPLAYER->hurtSound();
 	}
 	float p = currentTime - (int)currentTime;
 	Vector3 position = calculateSplinePoint(p, currentRail, localSegment);
