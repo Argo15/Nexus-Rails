@@ -24,7 +24,7 @@ int MusicPlayer::init()
 float transition =0.0f;
 void MusicPlayer::setSpeed(float speed)
 {
-	if(speed >= .034 && transition < 1)
+	if(speed >= .041 && transition < 1)
 	{
 		(*music)->setPitchShift(1+transition);
 		transition = transition+0.009f;
@@ -33,7 +33,7 @@ void MusicPlayer::setSpeed(float speed)
 		(*music)->setPitchShift(2);
 		}
 	}
-	else if(speed < .035)
+	else if(speed < .04)
 	{
 		(*music)->setPitchShift(1);
 		transition = 0.0f;
