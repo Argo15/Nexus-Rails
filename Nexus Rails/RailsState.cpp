@@ -40,7 +40,7 @@ void RailsState::tick(int fps) {
 	clock += 1.0/fps;
 	if (clock > 1.0) {
 		clock = 0.0;
-		rails->reloadRails();
+		//rails->reloadRails();
 	}
 	Root::ModelviewMatrix.top() = glm::mat4(1.0f);
 	Root::ProjectionMatrix.top() = glm::mat4(1.0f);

@@ -112,6 +112,8 @@ int main(int argc, char **argv) {
 	glutMotionFunc(mousePressedMove);
 	glutPassiveMotionFunc(mouseReleasedMove);
 
+	FreeConsole();
+
 	// enter GLUT event processing cycle
 	init();
 	glutMainLoop();
