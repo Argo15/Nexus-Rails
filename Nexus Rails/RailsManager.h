@@ -18,6 +18,7 @@ class RailsManager {
 private:
 	int numRails;
 	vector<Vector3 *> *railPositions;
+	vector<Vector3 *> *bsplinePositions;
 	Vector3 **railColors;
 	int *startTimes;
 	vector<Connection> *connections;
@@ -34,7 +35,8 @@ private:
 
 	float currentTime;	// Time = num segments since start of rail 0
 	int currentRail;	// Starts on 0
-	int previousRail;	
+	int previousRail;
+	void loadRails();
 
 public:
 	RailsManager();

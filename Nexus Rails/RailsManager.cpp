@@ -30,12 +30,14 @@ void RailsManager::reloadRails() {
 		myReadFile >> output >> numRails;
 		if (railPositions == 0) {
 			delete[] railPositions;
+//			delete[] bsplinePositions;
 			delete[] railColors;
 			delete[] startTimes;
 			delete[] connections;
 			delete actors;
 		}
 		railPositions = new vector<Vector3 *>[numRails];
+		bsplinePositions = new vector<Vector3 *>[numRails];
 		railColors = new Vector3*[numRails];
 		startTimes = new int[numRails];
 		connections = new vector<Connection>[10000];
@@ -86,8 +88,38 @@ void RailsManager::reloadRails() {
 		
 		myReadFile.close();
 	}
+	loadRails();
 }
 
+void RailsManager::loadRails()
+{
+	for (int railID=0; railID<numRails; railID++) {
+	int npts = railPositions[railID].size()-1;
+	int nsegment = 32;
+		//Vector3 pts[33];
+
+		for(int startingPoint =0 ; startingPoint < npts;startingPoint++)
+		{
+			for(int i =0; i<=nsegment; i++)
+			{
+				if(startingPoint >= npts)
+				{
+					break;
+				}
+				float t = (float)i/nsegment;
+				Vector3 pts = calculateSplinePoint(t,railID,startingPoint);
+				Vector3* ptsptr = new Vector3(pts);
+				if(pts[0]!=-3000)
+				{
+					//here
+					bsplinePositions[railID].push_back(ptsptr);
+				}
+				//cout<<pts[i][0]<<" "<<pts[i][1]<<" "<<pts[i][2]<<endl;
+			}
+		}
+
+	}
+}
 void RailsManager::drawRails(Camera *camera) {
 	//int numSubDivides = 10.0;
 	GLSLProgram *glslProgram = Root::shaderManager->getShader("Basic");
@@ -106,7 +138,7 @@ void RailsManager::drawRails(Camera *camera) {
 	glLineWidth(10.0);
 	Vector3 camPos = camera->geteyeV();
 	camPos[1]=0;
-	for (int railID=0; railID<numRails; railID++) {
+	/*for (int railID=0; railID<numRails; railID++) {
 		glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
 		glslProgram->sendUniform("material.emission", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
 		int npts = railPositions[railID].size()-1;
@@ -122,7 +154,6 @@ void RailsManager::drawRails(Camera *camera) {
 					break;
 				}
 				float t = (float)i/nsegment;
-				//System.out.println("t "+t);
 				pts[i] = calculateSplinePoint(t,railID,startingPoint);
 				if(pts[i][0]!=-3000 && Vector3(camPos-pts[i]).length() < 150.0)
 				{
@@ -131,15 +162,29 @@ void RailsManager::drawRails(Camera *camera) {
 				//cout<<pts[i][0]<<" "<<pts[i][1]<<" "<<pts[i][2]<<endl;
 			}
 		}
+*/
 
-
+		
+		for(int railID =0;railID <numRails;railID++)
+		{
+			glslProgram->sendUniform("material.color", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
+			glslProgram->sendUniform("material.emission", railColors[railID][0][0],railColors[railID][0][1],railColors[railID][0][2]);
+			glBegin(GL_LINE_STRIP);
+			for(int i =0;i<bsplinePositions[railID].size()-1;i++)
+			{
+				glVertex3f((bsplinePositions[railID][i])[0][0],(bsplinePositions[railID][i])[0][1],(bsplinePositions[railID][i])[0][2]);
+				//cout<<(bsplinePositions[railID][i])[0][0]<<endl;
+			}
+			glEnd();
+		}
+		
 		//glBegin(GL_LINE_STRIP);
 		//for(int r =5;r<30;r++)
 		//{
 		//	glVertex3f(pts[r][0],pts[r][1],pts[r][2]);
 		//}
-		glEnd();
-	}
+		//glEnd();
+	//}
 	for (int railID=0; railID<numRails; railID++) {
 		int npts = railPositions[railID].size()-1;
 		for(int startingPoint = 0 ; startingPoint < npts;startingPoint++) {
