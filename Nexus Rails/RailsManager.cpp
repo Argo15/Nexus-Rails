@@ -4,10 +4,12 @@
 #include<iostream>
 #include<fstream>
 #include<math.h>
+#include <GL/freeglut.h>
 using namespace std;
 
 RailsManager::RailsManager() {
 	railPositions = 0;
+	bsplinePositions = 0;
 	railColors = 0;
 	currentRail = 1;
 	currentTime = 0;
@@ -28,9 +30,9 @@ void RailsManager::reloadRails() {
 	int iOutput = 0;
 	if (myReadFile.is_open()) {
 		myReadFile >> output >> numRails;
-		if (railPositions == 0) {
+		if (railPositions != 0) {
 			delete[] railPositions;
-//			delete[] bsplinePositions;
+			delete[] bsplinePositions;
 			delete[] railColors;
 			delete[] startTimes;
 			delete[] connections;
@@ -199,6 +201,26 @@ void RailsManager::drawRails(Camera *camera) {
 			glEnd();
 		}
 	}
+/*
+glMatrixMode(GL_PROJECTION);
+glPushMatrix();
+glLoadIdentity();
+gluOrtho2D(0.0, 1280, 0.0, 720);
+
+glMatrixMode(GL_MODELVIEW);
+glPushMatrix();
+glLoadIdentity();
+glColor3f(0.0, 1.0, 0.0); // Green
+glRasterPos2i(10, 10);
+
+	void* font = GLUT_BITMAP_TIMES_ROMAN_24;
+	glutBitmapString(font, (const unsigned char*)"TESTING");
+glMatrixMode(GL_MODELVIEW);
+glPopMatrix();
+
+glMatrixMode(GL_PROJECTION);
+glPopMatrix();
+*/
 }
 
 void RailsManager::drawActors(Camera *camera, string shader) {
